@@ -1,3 +1,7 @@
-## [0.0.1] - TODO: Add release date.
+## [1.0.0] - 2020-01-24
 
-* TODO: Describe initial release.
+* Initial release
+* Select single or multiple choice
+* Display in scrollable or wrapped List
+* Customizable choice input
+* Build choice option from any List

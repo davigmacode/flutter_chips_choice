@@ -39,6 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter ChipsChoice'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () => _about(context),
+          )
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.all(5),
@@ -47,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             title: 'Scrollable List Single Choice',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<String, int>(
+              options: ChipsChoiceOption.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
@@ -71,16 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
             title: 'Wrapped List Single Choice',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<String, int>(
+              options: ChipsChoiceOption.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
               ),
               onChanged: (val) => setState(() => tag = val),
-              itemConfig: ChipsChoiceItemConfig(
-                isWrapped: true,
-                margin: EdgeInsets.all(0)
-              ),
+              isWrapped: true,
             ),
           ),
           Content(
@@ -93,27 +96,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 label: (i, v) => v,
               ),
               onChanged: (val) => setState(() => tags = val),
-              itemConfig: ChipsChoiceItemConfig(
-                isWrapped: true,
-                margin: EdgeInsets.all(0)
-              ),
+              isWrapped: true,
             ),
           ),
           Content(
             title: 'Disabled Choice item',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<String, int>(
+              options: ChipsChoiceOption.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
                 disabled: (i, v) => [0, 2, 5].contains(i),
               ),
               onChanged: (val) => setState(() => tag = val),
-              itemConfig: ChipsChoiceItemConfig(
-                isWrapped: true,
-                margin: EdgeInsets.all(0)
-              ),
+              isWrapped: true,
             ),
           ),
           Content(
@@ -127,14 +124,73 @@ class _MyHomePageState extends State<MyHomePage> {
                 hidden: (i, v) => ['Science', 'Politics', 'News', 'Tech'].contains(v),
               ),
               onChanged: (val) => setState(() => tags = val),
-              itemConfig: ChipsChoiceItemConfig(
-                isWrapped: true,
-                margin: EdgeInsets.all(0)
+              isWrapped: true,
+            ),
+          ),
+          Content(
+            title: 'Custom Choice item',
+            child: ChipsChoice<String>.multiple(
+              value: tags,
+              options: ChipsChoiceOption.listFrom<String, String>(
+                source: options,
+                value: (i, v) => v,
+                label: (i, v) => v,
               ),
+              itemBuilder: (item, selected, onSelect) {
+                return CustomChip(item.value, item.label, selected, onSelect);
+              },
+              onChanged: (val) => setState(() => tags = val),
+              isWrapped: true,
             ),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class CustomChip<T> extends StatelessWidget {
+
+  final T value;
+  final String label;
+  final bool selected;
+  final Function(T value, bool selected) onSelect;
+
+  CustomChip(
+    this.value,
+    this.label,
+    this.selected,
+    this.onSelect,
+    { Key key }
+  ) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      duration: Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: selected ? Colors.green : Colors.transparent,
+        border: Border.all(
+          color: selected ? Colors.green : Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: () => onSelect(value, !selected),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 7,
+            horizontal: 9,
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected ? Colors.white : Colors.black45,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -176,4 +232,44 @@ class Content extends StatelessWidget {
       ),
     );
   }
+}
+
+void _about(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              'chips_choice',
+              style: Theme.of(context).textTheme.headline.merge(TextStyle(color: Colors.black87)),
+            ),
+            subtitle: Text('by davigmacode'),
+            trailing: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Easy way to provide a single or multiple choice chips.',
+                    style: Theme.of(context).textTheme.body1.merge(TextStyle(color: Colors.black54)),
+                  ),
+                  Container(height: 15),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }
