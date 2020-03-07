@@ -17,8 +17,8 @@ Lite version of [smart_select](https://pub.dev/packages/smart_select) package, z
 
 * Select single or multiple choice
 * Display in scrollable or wrapped List
-* Customizable choice input
 * Build choice option from any List
+* Customizable choice widget
 
 ## Usage
 
@@ -81,10 +81,10 @@ ChipsChoice<String>.multiple(
 ChipsChoice<T>.single/multiple(
   ...,
   ...,
-  options: <ChipsChoiceOption<int>>[
-    ChipsChoiceOption<int>(value: 1, label: 'Entertainment'),
-    ChipsChoiceOption<int>(value: 2, label: 'Education'),
-    ChipsChoiceOption<int>(value: 3, label: 'Fashion'),
+  options: <ChipsChoiceOption<T>>[
+    ChipsChoiceOption<T>(value: 1, label: 'Entertainment'),
+    ChipsChoiceOption<T>(value: 2, label: 'Education'),
+    ChipsChoiceOption<T>(value: 3, label: 'Fashion'),
   ],
 );
 ```

@@ -1,7 +1,7 @@
 library chips_choice;
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show FilterChip, ThemeData, Theme;
+import 'package:flutter/material.dart' show FilterChip, ThemeData, Theme, Brightness;
 
 /// Easy way to provide a single or multiple choice chips.
 class ChipsChoice<T> extends StatelessWidget {
@@ -38,6 +38,7 @@ class ChipsChoice<T> extends StatelessWidget {
     this.isWrapped = false,
     this.padding,
   }) : assert(onChanged != null),
+    assert(options != null),
     assert(isWrapped != null),
     _isMultiChoice = false,
     _value = value,
@@ -57,6 +58,7 @@ class ChipsChoice<T> extends StatelessWidget {
     this.isWrapped = false,
     this.padding,
   }) : assert(onChanged != null),
+    assert(options != null),
     assert(isWrapped != null),
     _isMultiChoice = true,
     _value = null,
@@ -68,68 +70,75 @@ class ChipsChoice<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return isWrapped == true
-      ? _listWrapped()
-      : _listScrollable();
+      ? _listWrapped(context)
+      : _listScrollable(context);
   }
 
-  Widget _listScrollable() {
+  Widget _listScrollable(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
-        children: _choiceItems,
+        children: _choiceItems(context),
       ),
     );
   }
 
-  Widget _listWrapped() {
+  Widget _listWrapped(BuildContext context) {
     return Padding(
-      padding: padding ?? EdgeInsets.symmetric(
+      padding: padding ?? const EdgeInsets.symmetric(
         vertical: 10.0,
         horizontal: 15.0,
       ),
       child: Wrap(
         spacing: itemConfig.spacing, // gap between adjacent chips
         runSpacing: itemConfig.runSpacing, // gap between lines
-        children: _choiceItems,
+        children: _choiceItems(context),
       ),
     );
   }
 
-  List<Widget> get _choiceItems {
+  List<Widget> _choiceItems(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return List<Widget>
-      .generate(options.length, _choiceItemsGenerator)
+      .generate(options.length, _choiceItemsGenerator(theme))
       .where((e) => e != null).toList();
   }
 
-  Widget _choiceItemsGenerator(int i) {
-    ChipsChoiceOption<T> item = options[i];
-    bool selected = _isMultiChoice
-      ? _values.contains(item.value)
-      : _value == item.value;
-    return item.hidden == false
-      ? itemBuilder?.call(item, selected, _onSelect) ?? _ChipsChoiceItem(
-          item: item,
-          config: itemConfig,
-          selected: selected,
-          onSelect: _onSelect,
-          isWrapped: isWrapped,
-        )
-      : null;
+  Widget Function(int) _choiceItemsGenerator(ThemeData theme) {
+    return (int i) {
+      ChipsChoiceOption<T> item = options[i];
+      bool selected = _isMultiChoice
+        ? _values.contains(item.value)
+        : _value == item.value;
+      return item.hidden == false
+        ? itemBuilder?.call(item, selected, _select(item.value)) ?? _ChipsChoiceItem(
+            item: item,
+            config: itemConfig,
+            selected: selected,
+            selectedColor: itemConfig.selectedColor ?? theme.primaryColor,
+            unselectedColor: itemConfig.unselectedColor ?? theme.unselectedWidgetColor,
+            onSelect: _select(item.value),
+            isWrapped: isWrapped,
+          )
+        : null;
+    };
   }
 
-  void _onSelect(T value, bool selected) {
-    if (_isMultiChoice) {
-      List<T> values = List.from(_values ?? []);
-      if (selected) {
-        values.add(value);
+  Function(bool selected) _select(T value) {
+    return (bool selected) {
+      if (_isMultiChoice) {
+        List<T> values = List.from(_values ?? []);
+        if (selected) {
+          values.add(value);
+        } else {
+          values.remove(value);
+        }
+        _onChangedMultiple?.call(values);
       } else {
-        values.remove(value);
+        _onChangedSingle?.call(value);
       }
-      _onChangedMultiple?.call(values);
-    } else {
-      _onChangedSingle?.call(value);
-    }
+    };
   }
 }
 
@@ -138,7 +147,9 @@ class _ChipsChoiceItem<T> extends StatelessWidget {
 
   final ChipsChoiceOption<T> item;
   final ChipsChoiceItemConfig config;
-  final Function onSelect;
+  final Color selectedColor;
+  final Color unselectedColor;
+  final Function(bool selected) onSelect;
   final bool selected;
   final bool isWrapped;
 
@@ -148,43 +159,64 @@ class _ChipsChoiceItem<T> extends StatelessWidget {
     @required this.config,
     @required this.onSelect,
     @required this.selected,
+    this.selectedColor,
+    this.unselectedColor,
     this.isWrapped = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = Theme.of(context);
-    Color _selectedColor = config.selectedColor ?? _theme.primaryColor;
-    Color _unselectedColor = config.unselectedColor ?? _theme.unselectedWidgetColor;
+    final bool isDark = selected
+      ? config.selectedBrightness == Brightness.dark
+      : config.unselectedBrightness == Brightness.dark;
+
+    final Color textColor = isDark
+      ? const Color(0xFFFFFFFF)
+      : selected ? selectedColor : unselectedColor;
+
+    final double borderOpacity = selected
+      ? config.selectedBorderOpacity
+      : config.unselectedBorderOpacity;
+
+    final Color borderColor = isDark
+      ? const Color(0x00000000)
+      : textColor.withOpacity(borderOpacity ?? .2);
+
+    final Color checkmarkColor = isDark
+      ? textColor
+      : selectedColor;
+
+    final Color backgroundColor = isDark
+      ? unselectedColor
+      : const Color(0x00000000);
+
+    final Color selectedBackgroundColor = isDark
+      ? selectedColor
+      : const Color(0x00000000);
 
     return Padding(
-      padding: config.margin ?? isWrapped ? EdgeInsets.all(0) : EdgeInsets.all(5),
+      padding: config.margin ?? isWrapped ? const EdgeInsets.all(0) : const EdgeInsets.all(5),
       child: FilterChip(
         label: Text(
           item.label,
-          style: TextStyle(
-            color: selected ? _selectedColor : _unselectedColor,
-          ),
+          style: TextStyle(color: textColor),
         ),
         avatar: item.avatar,
         shape: config.shapeBuilder?.call(selected) ?? StadiumBorder(
-          side: BorderSide(
-            color: selected
-              ? _selectedColor.withOpacity(.2)
-              : _unselectedColor.withOpacity(.2),
-          ),
+          side: BorderSide(color: borderColor),
         ),
+        clipBehavior: config.clipBehavior ?? Clip.none,
         elevation: config.elevation,
         pressElevation: config.pressElevation,
-        shadowColor: _unselectedColor,
-        selectedShadowColor: _selectedColor,
-        backgroundColor: Color(0x00000000),
-        selectedColor: Color(0x00000000),
-        checkmarkColor: _selectedColor,
+        shadowColor: unselectedColor,
+        selectedShadowColor: selectedColor,
+        backgroundColor: backgroundColor,
+        selectedColor: selectedBackgroundColor,
+        checkmarkColor: checkmarkColor,
         showCheckmark: config.showCheckmark == true,
         selected: selected,
         onSelected: item.disabled == false
-          ? (_selected) => onSelect(item.value, _selected)
+          ? (_selected) => onSelect(_selected)
           : null,
       ),
     );
@@ -209,6 +241,9 @@ class ChipsChoiceOption<T> {
   /// Whether the choice is hidden or displayed
   final bool hidden;
 
+  /// This prop is useful for choice builder
+  final dynamic meta;
+
   /// Default Constructor
   ChipsChoiceOption({
     @required this.value,
@@ -216,6 +251,7 @@ class ChipsChoiceOption<T> {
     this.avatar,
     this.disabled = false,
     this.hidden = false,
+    this.meta,
   }) : assert(disabled != null),
     assert(hidden != null);
 
@@ -227,6 +263,7 @@ class ChipsChoiceOption<T> {
     _ChipsChoiceOptionProp<E, Widget> avatar,
     _ChipsChoiceOptionProp<E, bool> disabled,
     _ChipsChoiceOptionProp<E, bool> hidden,
+    _ChipsChoiceOptionProp<E, dynamic> meta,
   }) => source
     .asMap()
     .map((index, item) => MapEntry(index, ChipsChoiceOption<R>(
@@ -235,6 +272,7 @@ class ChipsChoiceOption<T> {
       avatar: avatar?.call(index, item),
       disabled: disabled?.call(index, item) ?? false,
       hidden: hidden?.call(index, item) ?? false,
+      meta: meta?.call(index, item),
     )))
     .values
     .toList()
@@ -243,15 +281,6 @@ class ChipsChoiceOption<T> {
 
 /// Choice item configuration
 class ChipsChoiceItemConfig {
-
-  /// whether the chips use checkmark or not
-  final bool showCheckmark;
-
-  /// Selected item color
-  final Color selectedColor;
-
-  /// Unselected item color
-  final Color unselectedColor;
 
   /// choice item margin
   final EdgeInsetsGeometry margin;
@@ -270,19 +299,50 @@ class ChipsChoiceItemConfig {
   /// Longpress chips elevation
   final double pressElevation;
 
+  /// whether the chips use checkmark or not
+  final bool showCheckmark;
+
+  /// Selected item color
+  final Color selectedColor;
+
+  /// Unselected item color
+  final Color unselectedColor;
+
+  /// Brightness for selected chip
+  final Brightness selectedBrightness;
+
+  /// Brightness for unselected chip
+  final Brightness unselectedBrightness;
+
+  /// Opacity for selected chip border, only effect when
+  /// [selectedBrightness] is [Brightness.light]
+  final double selectedBorderOpacity;
+
+  /// Opacity for unselected chip border, only effect when
+  /// [unselectedBrightness] is [Brightness.light]
+  final double unselectedBorderOpacity;
+
+  /// Chips clip behavior
+  final Clip clipBehavior;
+
   /// Chips shape builder
   final ChipsChoiceShapeBuilder shapeBuilder;
 
   /// Default Constructor
   const ChipsChoiceItemConfig({
-    this.showCheckmark = true,
-    this.selectedColor,
-    this.unselectedColor,
     this.margin,
     this.spacing = 10.0,
     this.runSpacing = 0,
     this.elevation = 0,
     this.pressElevation = 0,
+    this.showCheckmark = true,
+    this.selectedColor,
+    this.unselectedColor,
+    this.selectedBrightness = Brightness.light,
+    this.unselectedBrightness = Brightness.light,
+    this.selectedBorderOpacity,
+    this.unselectedBorderOpacity,
+    this.clipBehavior,
     this.shapeBuilder,
   });
 }
@@ -294,11 +354,11 @@ typedef R _ChipsChoiceOptionProp<T, R>(int index, T item);
 typedef ShapeBorder ChipsChoiceShapeBuilder(bool selected);
 
 /// Callback when the value changed
-typedef void ChipsChoiceChanged<T>(T values);
+typedef void ChipsChoiceChanged<T>(T value);
 
 /// Builder for custom choice item
 typedef Widget ChipsChoiceBuilder<T>(
   ChipsChoiceOption<T> item,
   bool selected,
-  Function(T value, bool selected) onSelect,
+  Function(bool selected) select,
 );
