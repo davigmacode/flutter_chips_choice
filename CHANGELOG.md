@@ -1,3 +1,7 @@
+## [1.2.0] - 2020-04-05
+
+* Add `labelStyle` to `ChipsChoiceItemConfig`
+
 ## [1.1.0] - 2020-03-07
 
 * Improve performance, since `Theme.of(context)` in default choice widget is moved outside, so this only fired once

@@ -169,6 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
               )..insert(0, ChipsChoiceOption<int>(value: -1, label: 'All')),
               itemConfig: const ChipsChoiceItemConfig(
                 showCheckmark: false,
+                labelStyle: TextStyle(
+                  fontSize: 20
+                ),
                 selectedBrightness: Brightness.dark,
                 // unselectedBrightness: Brightness.dark,
               ),

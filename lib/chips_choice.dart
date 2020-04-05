@@ -199,7 +199,7 @@ class _ChipsChoiceItem<T> extends StatelessWidget {
       child: FilterChip(
         label: Text(
           item.label,
-          style: TextStyle(color: textColor),
+          style: config?.labelStyle?.copyWith(color: textColor) ?? TextStyle(color: textColor),
         ),
         avatar: item.avatar,
         shape: config.shapeBuilder?.call(selected) ?? StadiumBorder(
@@ -302,6 +302,9 @@ class ChipsChoiceItemConfig {
   /// whether the chips use checkmark or not
   final bool showCheckmark;
 
+  /// label style
+  final TextStyle labelStyle;
+
   /// Selected item color
   final Color selectedColor;
 
@@ -336,6 +339,7 @@ class ChipsChoiceItemConfig {
     this.elevation = 0,
     this.pressElevation = 0,
     this.showCheckmark = true,
+    this.labelStyle = const TextStyle(),
     this.selectedColor,
     this.unselectedColor,
     this.selectedBrightness = Brightness.light,
