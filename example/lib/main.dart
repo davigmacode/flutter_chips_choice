@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Content(
-            title: 'Selected without Checkmark and Brightness Dark',
+            title: 'Without Checkmark and Custom Border Shape',
             child: ChipsChoice<int>.single(
               value: tag,
               onChanged: (val) => setState(() => tag = val),
@@ -167,13 +167,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: (i, v) => i,
                 label: (i, v) => v,
               )..insert(0, ChipsChoiceOption<int>(value: -1, label: 'All')),
-              itemConfig: const ChipsChoiceItemConfig(
+              itemConfig: ChipsChoiceItemConfig(
                 showCheckmark: false,
                 labelStyle: TextStyle(
                   fontSize: 20
                 ),
                 selectedBrightness: Brightness.dark,
-                // unselectedBrightness: Brightness.dark,
+                shapeBuilder: (selected) {
+                  return RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(selected ? 5.0 : 25.0),
+                    side: BorderSide(color: selected ? Colors.red : Colors.blueGrey.withOpacity(.5))
+                  );
+                }
               ),
             ),
           ),
@@ -203,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       options: snapshot.data,
                       onChanged: (val) => setState(() => user = val),
                       itemConfig: ChipsChoiceItemConfig(
+                        margin: const EdgeInsets.all(5),
                         selectedColor: Colors.green,
                         unselectedColor: Colors.blueGrey,
                         selectedBrightness: Brightness.dark,
@@ -412,7 +418,7 @@ void _about(BuildContext context) {
           ListTile(
             title: Text(
               'chips_choice',
-              style: Theme.of(context).textTheme.headline.copyWith(color: Colors.black87),
+              style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
             ),
             subtitle: Text('by davigmacode'),
             trailing: IconButton(
@@ -429,7 +435,7 @@ void _about(BuildContext context) {
                 children: <Widget>[
                   Text(
                     'Easy way to provide a single or multiple choice chips.',
-                    style: Theme.of(context).textTheme.body1.copyWith(color: Colors.black54),
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.black54),
                   ),
                   Container(height: 15),
                 ],

@@ -1,8 +1,6 @@
 library chips_choice;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show FilterChip, ThemeData, Theme, Brightness;
 
 /// Easy way to provide a single or multiple choice chips.
 class ChipsChoice<T> extends StatelessWidget {
