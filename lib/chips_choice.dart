@@ -18,6 +18,9 @@ class ChipsChoice<T> extends StatelessWidget {
   /// Whether the chips is wrapped or scrollable
   final bool isWrapped;
 
+  /// If [isWrapped], determines how wrap will align the objects
+  final WrapAlignment wrapAlignment;
+
   /// List padding
   final EdgeInsetsGeometry padding;
 
@@ -36,6 +39,7 @@ class ChipsChoice<T> extends StatelessWidget {
     this.itemConfig = const ChipsChoiceItemConfig(),
     this.itemBuilder,
     this.isWrapped = false,
+    this.wrapAlignment = WrapAlignment.start,
     this.padding,
   }) : assert(onChanged != null),
     assert(options != null),
@@ -56,6 +60,7 @@ class ChipsChoice<T> extends StatelessWidget {
     this.itemConfig = const ChipsChoiceItemConfig(),
     this.itemBuilder,
     this.isWrapped = false,
+    this.wrapAlignment = WrapAlignment.start,
     this.padding,
   }) : assert(onChanged != null),
     assert(options != null),
@@ -91,6 +96,7 @@ class ChipsChoice<T> extends StatelessWidget {
         horizontal: 15.0,
       ),
       child: Wrap(
+        alignment: wrapAlignment,
         spacing: itemConfig.spacing, // gap between adjacent chips
         runSpacing: itemConfig.runSpacing, // gap between lines
         children: _choiceItems(context),
