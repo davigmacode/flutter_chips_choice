@@ -1,5 +1,6 @@
 library chips_choice;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart' show FilterChip, ThemeData, Theme, Brightness;
 
@@ -201,7 +202,7 @@ class _ChipsChoiceItem<T> extends StatelessWidget {
       : const Color(0x00000000);
 
     return Padding(
-      padding: config.margin ?? isWrapped ? const EdgeInsets.all(0) : const EdgeInsets.all(5),
+      padding: config.margin ?? (isWrapped ? const EdgeInsets.all(0) : const EdgeInsets.all(5)),
       child: FilterChip(
         label: Text(
           item.label,
@@ -220,6 +221,7 @@ class _ChipsChoiceItem<T> extends StatelessWidget {
         selectedColor: selectedBackgroundColor,
         checkmarkColor: checkmarkColor,
         showCheckmark: config.showCheckmark == true,
+        materialTapTargetSize: config.materialTapTargetSize,
         selected: selected,
         onSelected: item.disabled == false
           ? (_selected) => onSelect(_selected)
@@ -308,6 +310,9 @@ class ChipsChoiceItemConfig {
   /// whether the chips use checkmark or not
   final bool showCheckmark;
 
+  /// Configures the minimum size of the tap target.
+  final MaterialTapTargetSize materialTapTargetSize;
+
   /// label style
   final TextStyle labelStyle;
 
@@ -345,6 +350,7 @@ class ChipsChoiceItemConfig {
     this.elevation = 0,
     this.pressElevation = 0,
     this.showCheckmark = true,
+    this.materialTapTargetSize,
     this.labelStyle = const TextStyle(),
     this.selectedColor,
     this.unselectedColor,
