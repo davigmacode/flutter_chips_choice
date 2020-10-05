@@ -37,19 +37,17 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   String user;
-  final usersMemoizer = AsyncMemoizer<List<ChipsChoiceOption<String>>>();
+  final usersMemoizer = AsyncMemoizer<List<C2Choice<String>>>();
 
-  Future<List<ChipsChoiceOption<String>>> getUsers() async {
+  Future<List<C2Choice<String>>> getUsers() async {
     String url = "https://randomuser.me/api/?inc=gender,name,nat,picture,email&results=25";
     Response res = await Dio().get(url);
-    return ChipsChoiceOption.listFrom<String, dynamic>(
+    return C2Choice.listFrom<String, dynamic>(
       source: res.data['results'],
       value: (index, item) => item['email'],
       label: (index, item) => item['name']['first'] + ' ' + item['name']['last'],
-      avatar: (index, item) => CircleAvatar(
-        backgroundImage: NetworkImage(item['picture']['thumbnail']),
-      ),
-    )..insert(0, ChipsChoiceOption<String>(value: 'all', label: 'All'));
+      meta: (index, item) => item,
+    )..insert(0, C2Choice<String>(value: 'all', label: 'All'));
   }
 
   @override
@@ -71,90 +69,90 @@ class _MyHomePageState extends State<MyHomePage> {
             title: 'Scrollable List Single Choice',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<int, String>(
+              onChanged: (val) => setState(() => tag = val),
+              choiceItems: C2Choice.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
               ),
-              onChanged: (val) => setState(() => tag = val),
             ),
           ),
           Content(
             title: 'Scrollable List Multiple Choice',
             child: ChipsChoice<String>.multiple(
               value: tags,
-              options: ChipsChoiceOption.listFrom<String, String>(
+              onChanged: (val) => setState(() => tags = val),
+              choiceItems: C2Choice.listFrom<String, String>(
                 source: options,
                 value: (i, v) => v,
                 label: (i, v) => v,
               ),
-              onChanged: (val) => setState(() => tags = val),
             ),
           ),
           Content(
             title: 'Wrapped List Single Choice',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<int, String>(
+              onChanged: (val) => setState(() => tag = val),
+              choiceItems: C2Choice.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
               ),
-              onChanged: (val) => setState(() => tag = val),
-              isWrapped: true,
+              wrapped: true,
             ),
           ),
           Content(
             title: 'Wrapped List Multiple Choice',
             child: ChipsChoice<String>.multiple(
               value: tags,
-              options: ChipsChoiceOption.listFrom<String, String>(
+              onChanged: (val) => setState(() => tags = val),
+              choiceItems: C2Choice.listFrom<String, String>(
                 source: options,
                 value: (i, v) => v,
                 label: (i, v) => v,
               ),
-              onChanged: (val) => setState(() => tags = val),
-              isWrapped: true,
+              wrapped: true,
             ),
           ),
           Content(
             title: 'Disabled Choice Item',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<int, String>(
+              onChanged: (val) => setState(() => tag = val),
+              choiceItems: C2Choice.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
                 disabled: (i, v) => [0, 2, 5].contains(i),
               ),
-              onChanged: (val) => setState(() => tag = val),
-              isWrapped: true,
+              wrapped: true,
             ),
           ),
           Content(
             title: 'Hidden Choice Item',
             child: ChipsChoice<String>.multiple(
               value: tags,
-              options: ChipsChoiceOption.listFrom<String, String>(
+              onChanged: (val) => setState(() => tags = val),
+              choiceItems: C2Choice.listFrom<String, String>(
                 source: options,
                 value: (i, v) => v,
                 label: (i, v) => v,
                 hidden: (i, v) => ['Science', 'Politics', 'News', 'Tech'].contains(v),
               ),
-              onChanged: (val) => setState(() => tags = val),
-              isWrapped: true,
+              wrapped: true,
             ),
           ),
           Content(
             title: 'Append an Item to Options',
             child: ChipsChoice<int>.single(
               value: tag,
-              options: ChipsChoiceOption.listFrom<int, String>(
+              onChanged: (val) => setState(() => tag = val),
+              choiceItems: C2Choice.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
-              )..insert(0, ChipsChoiceOption<int>(value: -1, label: 'All')),
-              onChanged: (val) => setState(() => tag = val),
+              )..insert(0, C2Choice<int>(value: -1, label: 'All')),
             ),
           ),
           Content(
@@ -162,29 +160,33 @@ class _MyHomePageState extends State<MyHomePage> {
             child: ChipsChoice<int>.single(
               value: tag,
               onChanged: (val) => setState(() => tag = val),
-              options: ChipsChoiceOption.listFrom<int, String>(
+              choiceItems: C2Choice.listFrom<int, String>(
                 source: options,
                 value: (i, v) => i,
                 label: (i, v) => v,
-              )..insert(0, ChipsChoiceOption<int>(value: -1, label: 'All')),
-              itemConfig: ChipsChoiceItemConfig(
+              )..insert(0, C2Choice<int>(value: -1, label: 'All')),
+              choiceStyle: C2Style(
                 showCheckmark: false,
                 labelStyle: TextStyle(
                   fontSize: 20
                 ),
-                selectedBrightness: Brightness.dark,
-                shapeBuilder: (selected) {
-                  return RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(selected ? 5.0 : 25.0),
-                    side: BorderSide(color: selected ? Colors.red : Colors.blueGrey.withOpacity(.5))
-                  );
-                }
+                borderShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  side: BorderSide(color: Colors.blueGrey.withOpacity(.5))
+                ),
+              ),
+              choiceActiveStyle: C2Style(
+                brightness: Brightness.dark,
+                borderShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(color: Colors.red)
+                ),
               ),
             ),
           ),
           Content(
-            title: 'Async Options and Brightness Dark',
-            child: FutureBuilder<List<ChipsChoiceOption<String>>>(
+            title: 'Async Choice Items and Brightness Dark',
+            child: FutureBuilder<List<C2Choice<String>>>(
               initialData: [],
               future: usersMemoizer.runOnce(getUsers),
               builder: (context, snapshot) {
@@ -205,16 +207,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (!snapshot.hasError) {
                     return ChipsChoice<String>.single(
                       value: user,
-                      options: snapshot.data,
                       onChanged: (val) => setState(() => user = val),
-                      itemConfig: ChipsChoiceItemConfig(
+                      choiceItems: snapshot.data,
+                      choiceStyle: C2Style(
+                        color: Colors.blueGrey,
+                        brightness: Brightness.dark,
                         margin: const EdgeInsets.all(5),
-                        selectedColor: Colors.green,
-                        unselectedColor: Colors.blueGrey,
-                        selectedBrightness: Brightness.dark,
-                        unselectedBrightness: Brightness.dark,
                         showCheckmark: false,
                       ),
+                      choiceActiveStyle: C2Style(
+                        color: Colors.green,
+                        brightness: Brightness.dark,
+                      ),
+                      choiceAvatarBuilder: (data) {
+                        if (data.meta == null) return null;
+                        return CircleAvatar(
+                          backgroundImage: NetworkImage(data.meta['picture']['thumbnail']),
+                        );
+                      },
                     );
                   } else {
                     return Container(
@@ -250,19 +260,21 @@ class _MyHomePageState extends State<MyHomePage> {
                       alignment: Alignment.centerLeft,
                       child: ChipsChoice<String>.multiple(
                         value: state.value,
-                        options: ChipsChoiceOption.listFrom<String, String>(
+                        onChanged: (val) => state.didChange(val),
+                        choiceItems: C2Choice.listFrom<String, String>(
                           source: options,
                           value: (i, v) => v,
                           label: (i, v) => v,
                         ),
-                        onChanged: (val) => state.didChange(val),
-                        itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Colors.indigo,
-                          selectedBrightness: Brightness.dark,
-                          unselectedColor: Colors.indigo,
-                          unselectedBorderOpacity: .3,
+                        choiceStyle: C2Style(
+                          color: Colors.indigo,
+                          borderOpacity: .3,
                         ),
-                        isWrapped: true,
+                        choiceActiveStyle: C2Style(
+                          color: Colors.indigo,
+                          brightness: Brightness.dark,
+                        ),
+                        wrapped: true,
                       ),
                     ),
                     Container(
@@ -286,15 +298,15 @@ class _MyHomePageState extends State<MyHomePage> {
             title: 'Custom Choice Widget',
             child: ChipsChoice<String>.multiple(
               value: tags,
-              options: ChipsChoiceOption.listFrom<String, String>(
+              onChanged: (val) => setState(() => tags = val),
+              choiceItems: C2Choice.listFrom<String, String>(
                 source: options,
                 value: (i, v) => v,
                 label: (i, v) => v,
               ),
-              itemBuilder: (item, selected, select) {
-                return CustomChip(item.label, selected, select);
+              choiceBuilder: (item) {
+                return CustomChip(item.label, item.selected, item.select);
               },
-              onChanged: (val) => setState(() => tags = val),
             ),
           ),
         ],
