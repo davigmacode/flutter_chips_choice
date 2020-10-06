@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Choice item style configuration
-class C2Style {
+class C2ChoiceStyle {
 
   /// Item color
   final Color color;
@@ -43,7 +43,7 @@ class C2Style {
   final double borderWidth;
 
   /// The radii for each corner.
-  final double borderRadius;
+  final BorderRadiusGeometry borderRadius;
 
   /// The style of this side of the border.
   ///
@@ -61,7 +61,7 @@ class C2Style {
   final double avatarBorderWidth;
 
   /// The radii for each corner.
-  final double avatarBorderRadius;
+  final BorderRadiusGeometry avatarBorderRadius;
 
   /// The style of this side of the border.
   ///
@@ -84,16 +84,16 @@ class C2Style {
   final Color disabledColor;
 
   /// Default Constructor
-  const C2Style({
+  const C2ChoiceStyle({
     this.color,
     this.margin,
     this.padding,
-    this.elevation = 0,
-    this.pressElevation = 0,
-    this.showCheckmark = true,
-    this.labelStyle = const TextStyle(),
+    this.elevation,
+    this.pressElevation,
+    this.showCheckmark,
+    this.labelStyle,
     this.labelPadding,
-    this.brightness = Brightness.light,
+    this.brightness,
     this.borderColor,
     this.borderOpacity,
     this.borderWidth,
@@ -110,9 +110,9 @@ class C2Style {
     this.disabledColor,
   });
 
-  /// Creates a copy of this [C2Style] but with
+  /// Creates a copy of this [C2ChoiceStyle] but with
   /// the given fields replaced with the new values.
-  C2Style copyWith({
+  C2ChoiceStyle copyWith({
     Color color,
     EdgeInsetsGeometry margin,
     EdgeInsetsGeometry padding,
@@ -125,19 +125,19 @@ class C2Style {
     Color borderColor,
     double borderOpacity,
     double borderWidth,
-    double borderRadius,
+    BorderRadiusGeometry borderRadius,
     BorderStyle borderStyle,
     ShapeBorder borderShape,
     Color avatarBorderColor,
     double avatarBorderWidth,
-    double avatarBorderRadius,
+    BorderRadiusGeometry avatarBorderRadius,
     BorderStyle avatarBorderStyle,
     ShapeBorder avatarBorderShape,
     Clip clipBehavior,
     MaterialTapTargetSize materialTapTargetSize,
     Color disabledColor,
   }) {
-    return C2Style(
+    return C2ChoiceStyle(
       color: color ?? this.color,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
@@ -164,9 +164,9 @@ class C2Style {
     );
   }
 
-  /// Creates a copy of this [C2Style] but with
+  /// Creates a copy of this [C2ChoiceStyle] but with
   /// the given fields replaced with the new values.
-  C2Style merge(C2Style other) {
+  C2ChoiceStyle merge(C2ChoiceStyle other) {
     // if null return current object
     if (other == null) return this;
 
