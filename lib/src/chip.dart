@@ -9,18 +9,16 @@ class C2Chip<T> extends StatelessWidget {
   final C2Choice<T> data;
 
   /// unselected choice style
-  final C2Style style;
+  final C2ChoiceStyle style;
 
   /// selected choice style
-  final C2Style activeStyle;
+  final C2ChoiceStyle activeStyle;
 
   /// label widget
   final Widget label;
 
   /// avatar widget
   final Widget avatar;
-
-  final bool isWrapped;
 
   /// default constructor
   const C2Chip({
@@ -30,14 +28,13 @@ class C2Chip<T> extends StatelessWidget {
     @required this.activeStyle,
     this.label,
     this.avatar,
-    this.isWrapped = false,
   }) : super(key: key);
 
   /// get shape border
   static ShapeBorder getShapeBorder({
     @required Color color,
     double width,
-    double radius,
+    BorderRadiusGeometry radius,
     BorderStyle style,
   }) {
     final BorderSide side = BorderSide(
@@ -48,7 +45,7 @@ class C2Chip<T> extends StatelessWidget {
     return radius == null
       ? StadiumBorder(side: side)
       : RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: radius,
           side: side,
         );
   }
@@ -57,7 +54,7 @@ class C2Chip<T> extends StatelessWidget {
   static ShapeBorder getAvatarShapeBorder({
     @required Color color,
     double width,
-    double radius,
+    BorderRadiusGeometry radius,
     BorderStyle style,
   }) {
     final BorderSide side = BorderSide(
@@ -68,7 +65,7 @@ class C2Chip<T> extends StatelessWidget {
     return radius == null
       ? CircleBorder(side: side)
       : RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: radius,
           side: side,
         );
   }
@@ -76,29 +73,21 @@ class C2Chip<T> extends StatelessWidget {
   /// default border opacity
   static final double defaultBorderOpacity = .2;
 
-  /// default chip margin in wrapped list
-  static final EdgeInsetsGeometry defaultWrappedMargin = const EdgeInsets.all(0);
-
-  /// default chip margin in scrollable list
-  static final EdgeInsetsGeometry defaultScrollableMargin = const EdgeInsets.all(5);
-
   @override
   Widget build(BuildContext context) {
-    final bool isDark = data.selected
-      ? activeStyle.brightness == Brightness.dark
-      : style.brightness == Brightness.dark;
+    final C2ChoiceStyle effectiveStyle = data.selected
+      ? activeStyle
+      : style;
+
+    final bool isDark = effectiveStyle.brightness == Brightness.dark;
 
     final Color textColor = isDark
       ? const Color(0xFFFFFFFF)
-      : data.selected ? activeStyle.color : style.color;
-
-    final double borderOpacity = data.selected
-      ? activeStyle.borderOpacity
-      : style.borderOpacity;
+      : effectiveStyle.color;
 
     final Color borderColor = isDark
       ? const Color(0x00000000)
-      : textColor.withOpacity(borderOpacity ?? defaultBorderOpacity);
+      : textColor.withOpacity(effectiveStyle.borderOpacity ?? defaultBorderOpacity);
 
     final Color checkmarkColor = isDark
       ? textColor
@@ -112,76 +101,38 @@ class C2Chip<T> extends StatelessWidget {
       ? activeStyle.color
       : const Color(0x00000000);
 
-    final EdgeInsetsGeometry margin = data.selected
-      ? activeStyle.margin
-      : style.margin;
-
-    final TextStyle labelStyle = data.selected
-      ? activeStyle.labelStyle
-      : style.labelStyle;
-
     return Padding(
-      padding: margin ?? (isWrapped ? defaultWrappedMargin : defaultScrollableMargin),
+      padding: effectiveStyle.margin,
       child: FilterChip(
-        padding: data.selected
-          ? activeStyle.padding
-          : style.padding,
+        padding: effectiveStyle.padding,
         label: label ?? Text(data.label),
-        labelStyle: TextStyle(color: textColor).merge(labelStyle),
-        labelPadding: data.selected
-          ? activeStyle.labelPadding
-          : style.labelPadding,
+        labelStyle: TextStyle(color: textColor).merge(effectiveStyle.labelStyle),
+        labelPadding: effectiveStyle.labelPadding,
         avatar: avatar,
-        avatarBorder: data.selected
-          ? activeStyle.avatarBorderShape ?? getAvatarShapeBorder(
-              color: activeStyle.avatarBorderColor ?? style.avatarBorderColor,
-              width: activeStyle.avatarBorderWidth ?? style.avatarBorderWidth,
-              radius: activeStyle.avatarBorderRadius ?? style.avatarBorderRadius,
-              style: activeStyle.avatarBorderStyle ?? style.avatarBorderStyle,
-            )
-          : style.borderShape ?? getAvatarShapeBorder(
-              color: style.avatarBorderColor,
-              width: style.avatarBorderWidth,
-              radius: style.avatarBorderRadius,
-              style: style.avatarBorderStyle,
-            ),
+        avatarBorder: effectiveStyle.avatarBorderShape ?? getAvatarShapeBorder(
+          color: effectiveStyle.avatarBorderColor,
+          width: effectiveStyle.avatarBorderWidth,
+          radius: effectiveStyle.avatarBorderRadius,
+          style: effectiveStyle.avatarBorderStyle,
+        ),
         tooltip: data.tooltip,
-        shape: data.selected
-          ? activeStyle.borderShape ?? getShapeBorder(
-              color: activeStyle.borderColor ?? borderColor,
-              width: activeStyle.borderWidth ?? style.borderWidth,
-              radius: activeStyle.borderRadius ?? style.borderRadius,
-              style: activeStyle.borderStyle ?? style.borderStyle,
-            )
-          : style.borderShape ?? getShapeBorder(
-              color: style.borderColor ?? borderColor,
-              width: style.borderWidth,
-              radius: style.borderRadius,
-              style: style.borderStyle,
-            ),
-        clipBehavior: data.selected
-          ? activeStyle.clipBehavior ?? Clip.none
-          : style.clipBehavior ?? Clip.none,
-        elevation: data.selected
-          ? activeStyle.elevation
-          : style.elevation,
-        pressElevation: data.selected
-          ? activeStyle.pressElevation
-          : style.pressElevation,
+        shape: effectiveStyle.borderShape ?? getShapeBorder(
+          color: effectiveStyle.borderColor ?? borderColor,
+          width: effectiveStyle.borderWidth,
+          radius: effectiveStyle.borderRadius,
+          style: effectiveStyle.borderStyle,
+        ),
+        clipBehavior: effectiveStyle.clipBehavior ?? Clip.none,
+        elevation: effectiveStyle.elevation ?? 0,
+        pressElevation: effectiveStyle.pressElevation ?? 0,
         shadowColor: style.color,
         selectedShadowColor: activeStyle.color,
         backgroundColor: backgroundColor,
         selectedColor: selectedBackgroundColor,
         checkmarkColor: checkmarkColor,
-        showCheckmark: data.selected
-          ? activeStyle.showCheckmark
-          : style.showCheckmark,
-        materialTapTargetSize: data.selected
-          ? activeStyle.materialTapTargetSize
-          : style.materialTapTargetSize,
-        disabledColor: data.selected
-          ? activeStyle.disabledColor ?? style.disabledColor ?? Colors.blueGrey.withOpacity(.1)
-          : style.disabledColor ?? Colors.blueGrey.withOpacity(.1),
+        showCheckmark: effectiveStyle.showCheckmark,
+        materialTapTargetSize: effectiveStyle.materialTapTargetSize,
+        disabledColor: effectiveStyle.disabledColor ?? Colors.blueGrey.withOpacity(.1),
         selected: data.selected,
         onSelected: data.disabled == false
           ? (_selected) => data.select(_selected)
