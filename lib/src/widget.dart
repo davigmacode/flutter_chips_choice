@@ -9,14 +9,17 @@ import 'chip.dart';
 /// Easy way to provide a single or multiple choice chips.
 class ChipsChoice<T> extends StatelessWidget {
 
-  /// List of option item
+  /// List of choice item
   final List<C2Choice<T>> choiceItems;
 
+  /// Async loader of choice items
+  final C2ChoiceLoader<T> choiceLoader;
+
   /// Choice unselected item style
-  final C2Style choiceStyle;
+  final C2ChoiceStyle choiceStyle;
 
   /// Choice selected item style
-  final C2Style choiceActiveStyle;
+  final C2ChoiceStyle choiceActiveStyle;
 
   /// Builder for custom choice item
   final C2Builder<T> choiceBuilder;
@@ -47,9 +50,10 @@ class ChipsChoice<T> extends StatelessWidget {
     Key key,
     @required T value,
     @required C2Changed<T> onChanged,
-    @required this.choiceItems,
-    this.choiceStyle = const C2Style(),
-    this.choiceActiveStyle = const C2Style(),
+    this.choiceItems,
+    this.choiceLoader,
+    this.choiceStyle = const C2ChoiceStyle(),
+    this.choiceActiveStyle = const C2ChoiceStyle(),
     this.choiceBuilder,
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
@@ -71,9 +75,10 @@ class ChipsChoice<T> extends StatelessWidget {
     Key key,
     @required List<T> value,
     @required C2Changed<List<T>> onChanged,
-    @required this.choiceItems,
-    this.choiceStyle = const C2Style(),
-    this.choiceActiveStyle = const C2Style(),
+    this.choiceItems,
+    this.choiceLoader,
+    this.choiceStyle = const C2ChoiceStyle(),
+    this.choiceActiveStyle = const C2ChoiceStyle(),
     this.choiceBuilder,
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
@@ -94,10 +99,16 @@ class ChipsChoice<T> extends StatelessWidget {
   static final EdgeInsetsGeometry defaultScrollablePadding = const EdgeInsets.symmetric(horizontal: 10);
 
   /// default padding for wrapped list
-  static final EdgeInsetsGeometry defaultWrappedPadding = const EdgeInsets.symmetric(
-    vertical: 10.0,
-    horizontal: 15.0,
-  );
+  static final EdgeInsetsGeometry defaultWrappedPadding = const EdgeInsets.fromLTRB(15, 10, 15, 10);
+
+  /// default chip margin in wrapped list
+  static final EdgeInsetsGeometry defaultWrappedChipMargin = const EdgeInsets.all(0);
+
+  /// default chip margin in scrollable list
+  static final EdgeInsetsGeometry defaultScrollableChipMargin = const EdgeInsets.all(5);
+
+  /// default chip margin
+  EdgeInsetsGeometry get defaultChipMargin => wrapped ? defaultWrappedChipMargin : defaultScrollableChipMargin;
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +131,15 @@ class ChipsChoice<T> extends StatelessWidget {
     return Padding(
       padding: padding ?? defaultWrappedPadding,
       child: Wrap(
+        direction: wrapConfig.direction,
+        textDirection: wrapConfig.textDirection,
+        verticalDirection: wrapConfig.verticalDirection,
         alignment: wrapConfig.alignment,
+        runAlignment: wrapConfig.runAlignment,
+        crossAxisAlignment: wrapConfig.crossAxisAlignment,
         spacing: wrapConfig.spacing, // gap between adjacent chips
         runSpacing: wrapConfig.runSpacing, // gap between lines
+        clipBehavior: wrapConfig.clipBehavior,
         children: _choiceItems(context),
       ),
     );
@@ -147,14 +164,15 @@ class ChipsChoice<T> extends StatelessWidget {
         ? choiceBuilder?.call(item) ?? C2Chip(
             data: item,
             style: choiceStyle.copyWith(
+              margin: choiceStyle.margin ?? defaultChipMargin,
               color: choiceStyle.color ?? theme.unselectedWidgetColor
             ),
-            activeStyle: choiceActiveStyle.copyWith(
+            activeStyle: choiceStyle.merge(choiceActiveStyle).copyWith(
+              margin: choiceActiveStyle.margin ?? defaultChipMargin,
               color: choiceActiveStyle.color ?? theme.primaryColor
             ),
             label: choiceLabelBuilder?.call(item),
             avatar: choiceAvatarBuilder?.call(item),
-            isWrapped: wrapped,
           )
         : null;
     };
