@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'choice_style.dart';
 
 /// Choice option
 class C2Choice<T> {
@@ -21,10 +22,20 @@ class C2Choice<T> {
   /// This prop is useful for choice builder
   final dynamic meta;
 
+  /// Individual choice unselected item style
+  final C2ChoiceStyle style;
+
+  /// Individual choice selected item style
+  final C2ChoiceStyle activeStyle;
+
   /// Callback to select choice
+  /// autofill by the system
+  /// used in choice builder
   final Function(bool selected) select;
 
   /// Whether the choice is selected or not
+  /// autofill by the system
+  /// used in choice builder
   final bool selected;
 
   /// Default Constructor
@@ -35,6 +46,8 @@ class C2Choice<T> {
     this.disabled = false,
     this.hidden = false,
     this.meta,
+    this.style,
+    this.activeStyle,
     this.select,
     this.selected = false,
   }) : assert(disabled != null),
@@ -43,9 +56,9 @@ class C2Choice<T> {
   @override
   bool operator ==(Object other) =>
     identical(this, other) ||
-    other is C2Choice &&
+      other is C2Choice &&
         runtimeType == other.runtimeType &&
-        value == other.value;
+          value == other.value;
 
   @override
   int get hashCode => value.hashCode;
@@ -59,6 +72,8 @@ class C2Choice<T> {
     _C2ChoiceProp<E, bool> disabled,
     _C2ChoiceProp<E, bool> hidden,
     _C2ChoiceProp<E, dynamic> meta,
+    _C2ChoiceProp<E, C2ChoiceStyle> style,
+    _C2ChoiceProp<E, C2ChoiceStyle> activeStyle,
   }) => source
     .asMap()
     .map((index, item) => MapEntry(index, C2Choice<R>(
@@ -68,6 +83,8 @@ class C2Choice<T> {
       disabled: disabled?.call(index, item) ?? false,
       hidden: hidden?.call(index, item) ?? false,
       meta: meta?.call(index, item),
+      style: style?.call(index, item),
+      activeStyle: activeStyle?.call(index, item),
     )))
     .values
     .toList()
@@ -82,6 +99,8 @@ class C2Choice<T> {
     bool disabled,
     bool hidden,
     dynamic meta,
+    C2ChoiceStyle style,
+    C2ChoiceStyle activeStyle,
     Function(bool selected) select,
     bool selected,
   }) {
@@ -92,6 +111,8 @@ class C2Choice<T> {
       disabled: disabled ?? this.disabled,
       hidden: hidden ?? this.hidden,
       meta: meta ?? this.meta,
+      style: style ?? this.style,
+      activeStyle: activeStyle ?? this.activeStyle,
       select: select ?? this.select,
       selected: selected ?? this.selected,
     );
@@ -110,6 +131,8 @@ class C2Choice<T> {
       disabled: other.disabled,
       hidden: other.hidden,
       meta: other.meta,
+      style: other.style,
+      activeStyle: other.activeStyle,
       select: other.select,
       selected: other.selected,
     );
