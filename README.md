@@ -412,7 +412,7 @@ List<Map<String, String>> days = [
 ChipsChoice<T>.[single|multiple](
   ...,
   ...,
-  options: C2Choice.listFrom<T, Map<String, String>>(
+  choiceItems: C2Choice.listFrom<T, Map<String, String>>(
     source: days,
     value: (index, item) => item['value'],
     label: (index, item) => item['title'],
