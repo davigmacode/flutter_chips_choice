@@ -103,7 +103,7 @@ class C2Chip<T> extends StatelessWidget {
 
     return Padding(
       padding: effectiveStyle.margin,
-      child: FilterChip(
+      child: RawChip(
         padding: effectiveStyle.padding,
         label: label ?? Text(data.label),
         labelStyle: TextStyle(color: textColor).merge(effectiveStyle.labelStyle),
@@ -133,10 +133,9 @@ class C2Chip<T> extends StatelessWidget {
         showCheckmark: effectiveStyle.showCheckmark,
         materialTapTargetSize: effectiveStyle.materialTapTargetSize,
         disabledColor: effectiveStyle.disabledColor ?? Colors.blueGrey.withOpacity(.1),
+        isEnabled: data.disabled != true,
         selected: data.selected,
-        onSelected: data.disabled == false
-          ? (_selected) => data.select(_selected)
-          : null,
+        onSelected: (_selected) => data.select(_selected),
       ),
     );
   }
