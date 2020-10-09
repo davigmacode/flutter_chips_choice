@@ -168,6 +168,93 @@ ChipsChoice<T>.[single|multiple]({
 })
 ```
 
+```dart
+// Choice item style configuration
+C2ChoiceStyle( {
+
+  // Item color
+  Color color,
+
+  // choice item margin
+  EdgeInsetsGeometry margin,
+
+  // The padding between the contents of the chip and the outside [shape].
+  //
+  // Defaults to 4 logical pixels on all sides.
+  EdgeInsetsGeometry padding,
+
+  // Chips elevation
+  double elevation,
+
+  // Longpress chips elevation
+  double pressElevation,
+
+  // whether the chips use checkmark or not
+  bool showCheckmark,
+
+  // Chip label style
+  TextStyle labelStyle,
+
+  // Chip label padding
+  EdgeInsetsGeometry labelPadding,
+
+  // Chip brightness
+  Brightness brightness,
+
+  // Chip border color
+  Color borderColor,
+
+  // Chip border opacity,
+  // only effect when [brightness] is [Brightness.light]
+  double borderOpacity,
+
+  // The width of this side of the border, in logical pixels.
+  double borderWidth,
+
+  // The radii for each corner.
+  BorderRadiusGeometry borderRadius,
+
+  // The style of this side of the border.
+  //
+  // To omit a side, set [style] to [BorderStyle.none].
+  // This skips painting the border, but the border still has a [width].
+  BorderStyle borderStyle,
+
+  // Chips shape border
+  ShapeBorder borderShape;
+
+  // Chip border color
+  Color avatarBorderColor,
+
+  // The width of this side of the border, in logical pixels.
+  double avatarBorderWidth,
+
+  // The radii for each corner.
+  BorderRadiusGeometry avatarBorderRadius,
+
+  // The style of this side of the border.
+  //
+  // To omit a side, set [style] to [BorderStyle.none].
+  // This skips painting the border, but the border still has a [width].
+  BorderStyle avatarBorderStyle,
+
+  // Chips shape border
+  ShapeBorder avatarBorderShape,
+
+  // Chips clip behavior
+  Clip clipBehavior,
+
+  // Configures the minimum size of the tap target.
+  MaterialTapTargetSize materialTapTargetSize,
+
+  // Color to be used for the chip's background indicating that it is disabled.
+  //
+  // It defaults to [Colors.black38].
+  Color disabledColor,
+
+})
+```
+
 ### Custom Builder
 
 ```dart
@@ -194,7 +281,7 @@ ChipsChoice<T>.[single|multiple]({
   /// Builder for placeholder widget
   WidgetBuilder placeholderBuilder,
 
-  // Builder for placeholder widget
+  // Builder for error widget
   WidgetBuilder errorBuilder,
 
   // other available configuration
@@ -322,7 +409,7 @@ List<Map<String, String>> days = [
   { 'value': 'sun', 'title': 'Sunday' },
 ];
 
-ChipsChoice<T>.single/multiple(
+ChipsChoice<T>.[single|multiple](
   ...,
   ...,
   options: C2Choice.listFrom<T, Map<String, String>>(
