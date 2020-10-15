@@ -91,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => i,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       ),
                     ),
                   ),
@@ -103,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => v,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       ),
                     ),
                   ),
@@ -115,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => i,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       ),
                       choiceStyle: C2ChoiceStyle(
                         borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -131,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => v,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       ),
                       wrapped: true,
                       textDirection: TextDirection.rtl,
@@ -145,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => i,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                         disabled: (i, v) => [0, 2, 5].contains(i),
                       ),
                       wrapped: true,
@@ -159,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => v,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                         hidden: (i, v) => ['Science', 'Politics', 'News', 'Tech'].contains(v),
                       ),
                       wrapped: true,
@@ -173,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => v,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                         style: (i, v) {
                           if (['Science', 'Politics', 'News', 'Tech'].contains(v)) {
                             return C2ChoiceStyle(
@@ -203,6 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => i,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       )..insert(0, C2Choice<int>(value: -1, label: 'All')),
                     ),
                   ),
@@ -215,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         source: options,
                         value: (i, v) => i,
                         label: (i, v) => v,
+                        tooltip: (i, v) => v,
                       )..insert(0, C2Choice<int>(value: -1, label: 'All')),
                       choiceStyle: C2ChoiceStyle(
                         showCheckmark: false,
@@ -344,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         source: options,
                                         value: (i, v) => v.toLowerCase(),
                                         label: (i, v) => v,
+                                        tooltip: (i, v) => v,
                                       ),
                                       choiceStyle: const C2ChoiceStyle(
                                         color: Colors.indigo,

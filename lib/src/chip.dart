@@ -135,7 +135,7 @@ class C2Chip<T> extends StatelessWidget {
         disabledColor: effectiveStyle.disabledColor ?? Colors.blueGrey.withOpacity(.1),
         isEnabled: data.disabled != true,
         selected: data.selected,
-        onSelected: (_selected) => data.select(_selected),
+        onPressed: () => data.select(!data.selected),
       ),
     );
   }

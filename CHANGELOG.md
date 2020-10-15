@@ -1,3 +1,7 @@
+## [2.0.1] - 2020-10-09
+
+* Fixed issue #11
+
 ## [2.0.0] - 2020-10-09
 
 * The `options` parameter is changed to `choiceItems`
