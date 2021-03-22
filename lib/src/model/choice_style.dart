@@ -4,84 +4,84 @@ import 'package:flutter/material.dart';
 class C2ChoiceStyle {
 
   /// Item color
-  final Color color;
+  final Color? color;
 
   /// choice item margin
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
 
   /// The padding between the contents of the chip and the outside [shape].
   ///
   /// Defaults to 4 logical pixels on all sides.
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// Chips elevation
-  final double elevation;
+  final double? elevation;
 
   /// Longpress chips elevation
-  final double pressElevation;
+  final double? pressElevation;
 
   /// whether the chips use checkmark or not
-  final bool showCheckmark;
+  final bool? showCheckmark;
 
   /// Chip label style
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
 
   /// Chip label padding
-  final EdgeInsetsGeometry labelPadding;
+  final EdgeInsetsGeometry? labelPadding;
 
   /// Chip brightness
-  final Brightness brightness;
+  final Brightness? brightness;
 
   /// Chip border color
-  final Color borderColor;
+  final Color? borderColor;
 
   /// Chip border opacity,
   /// only effect when [brightness] is [Brightness.light]
-  final double borderOpacity;
+  final double? borderOpacity;
 
   /// The width of this side of the border, in logical pixels.
-  final double borderWidth;
+  final double? borderWidth;
 
   /// The radii for each corner.
-  final BorderRadiusGeometry borderRadius;
+  final BorderRadiusGeometry? borderRadius;
 
   /// The style of this side of the border.
   ///
   /// To omit a side, set [style] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [width].
-  final BorderStyle borderStyle;
+  final BorderStyle? borderStyle;
 
   /// Chips shape border
-  final ShapeBorder borderShape;
+  final ShapeBorder? borderShape;
 
   /// Chip border color
-  final Color avatarBorderColor;
+  final Color? avatarBorderColor;
 
   /// The width of this side of the border, in logical pixels.
-  final double avatarBorderWidth;
+  final double? avatarBorderWidth;
 
   /// The radii for each corner.
-  final BorderRadiusGeometry avatarBorderRadius;
+  final BorderRadiusGeometry? avatarBorderRadius;
 
   /// The style of this side of the border.
   ///
   /// To omit a side, set [style] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [width].
-  final BorderStyle avatarBorderStyle;
+  final BorderStyle? avatarBorderStyle;
 
   /// Chips shape border
-  final ShapeBorder avatarBorderShape;
+  final ShapeBorder? avatarBorderShape;
 
   /// Chips clip behavior
-  final Clip clipBehavior;
+  final Clip? clipBehavior;
 
   /// Configures the minimum size of the tap target.
-  final MaterialTapTargetSize materialTapTargetSize;
+  final MaterialTapTargetSize? materialTapTargetSize;
 
   /// Color to be used for the chip's background indicating that it is disabled.
   ///
   /// It defaults to [Colors.black38].
-  final Color disabledColor;
+  final Color? disabledColor;
 
   /// Default Constructor
   const C2ChoiceStyle({
@@ -113,29 +113,29 @@ class C2ChoiceStyle {
   /// Creates a copy of this [C2ChoiceStyle] but with
   /// the given fields replaced with the new values.
   C2ChoiceStyle copyWith({
-    Color color,
-    EdgeInsetsGeometry margin,
-    EdgeInsetsGeometry padding,
-    double elevation,
-    double pressElevation,
-    bool showCheckmark,
-    TextStyle labelStyle,
-    EdgeInsetsGeometry labelPadding,
-    Brightness brightness,
-    Color borderColor,
-    double borderOpacity,
-    double borderWidth,
-    BorderRadiusGeometry borderRadius,
-    BorderStyle borderStyle,
-    ShapeBorder borderShape,
-    Color avatarBorderColor,
-    double avatarBorderWidth,
-    BorderRadiusGeometry avatarBorderRadius,
-    BorderStyle avatarBorderStyle,
-    ShapeBorder avatarBorderShape,
-    Clip clipBehavior,
-    MaterialTapTargetSize materialTapTargetSize,
-    Color disabledColor,
+    Color? color,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    double? elevation,
+    double? pressElevation,
+    bool? showCheckmark,
+    TextStyle? labelStyle,
+    EdgeInsetsGeometry? labelPadding,
+    Brightness? brightness,
+    Color? borderColor,
+    double? borderOpacity,
+    double? borderWidth,
+    BorderRadiusGeometry? borderRadius,
+    BorderStyle? borderStyle,
+    ShapeBorder? borderShape,
+    Color? avatarBorderColor,
+    double? avatarBorderWidth,
+    BorderRadiusGeometry? avatarBorderRadius,
+    BorderStyle? avatarBorderStyle,
+    ShapeBorder? avatarBorderShape,
+    Clip? clipBehavior,
+    MaterialTapTargetSize? materialTapTargetSize,
+    Color? disabledColor,
   }) {
     return C2ChoiceStyle(
       color: color ?? this.color,
@@ -166,7 +166,7 @@ class C2ChoiceStyle {
 
   /// Creates a copy of this [C2ChoiceStyle] but with
   /// the given fields replaced with the new values.
-  C2ChoiceStyle merge(C2ChoiceStyle other) {
+  C2ChoiceStyle merge(C2ChoiceStyle? other) {
     // if null return current object
     if (other == null) return this;
 
