@@ -8,7 +8,7 @@ import 'chip.dart';
 /// Easy way to provide a single or multiple choice chips.
 class ChipsChoice<T> extends StatefulWidget {
   /// List of choice item
-  final List<C2Choice<T>> choiceItems;
+  final List<C2Choice<T>>? choiceItems;
 
   /// Async loader of choice items
   final C2ChoiceLoader<T>? choiceLoader;
@@ -151,7 +151,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerColor,
     this.spinnerThickness,
   })  : assert(
-          choiceLoader != null,
+          choiceItems != null || choiceLoader != null,
           'One of the parameters must be provided',
         ),
         _isMultiChoice = false,
