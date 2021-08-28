@@ -15,27 +15,27 @@ class C2Chip<T> extends StatelessWidget {
   final C2ChoiceStyle activeStyle;
 
   /// label widget
-  final Widget label;
+  final Widget? label;
 
   /// avatar widget
-  final Widget avatar;
+  final Widget? avatar;
 
   /// default constructor
   const C2Chip({
-    Key key,
-    @required this.data,
-    @required this.style,
-    @required this.activeStyle,
+    Key? key,
+    required this.data,
+    required this.style,
+    required this.activeStyle,
     this.label,
     this.avatar,
   }) : super(key: key);
 
   /// get shape border
   static ShapeBorder getShapeBorder({
-    @required Color color,
-    double width,
-    BorderRadiusGeometry radius,
-    BorderStyle style,
+    required Color color,
+    double? width,
+    BorderRadiusGeometry? radius,
+    BorderStyle? style,
   }) {
     final BorderSide side = BorderSide(
       color: color,
@@ -52,10 +52,10 @@ class C2Chip<T> extends StatelessWidget {
 
   /// get shape border
   static ShapeBorder getAvatarShapeBorder({
-    @required Color color,
-    double width,
-    BorderRadiusGeometry radius,
-    BorderStyle style,
+    required Color? color,
+    double? width,
+    BorderRadiusGeometry? radius,
+    BorderStyle? style,
   }) {
     final BorderSide side = BorderSide(
       color: color ?? const Color(0xFF000000),
@@ -81,28 +81,28 @@ class C2Chip<T> extends StatelessWidget {
 
     final bool isDark = effectiveStyle.brightness == Brightness.dark;
 
-    final Color textColor = isDark
+    final Color? textColor = isDark
       ? const Color(0xFFFFFFFF)
       : effectiveStyle.color;
 
     final Color borderColor = isDark
       ? const Color(0x00000000)
-      : textColor.withOpacity(effectiveStyle.borderOpacity ?? defaultBorderOpacity);
+      : textColor!.withOpacity(effectiveStyle.borderOpacity ?? defaultBorderOpacity);
 
-    final Color checkmarkColor = isDark
+    final Color? checkmarkColor = isDark
       ? textColor
       : activeStyle.color;
 
-    final Color backgroundColor = isDark
+    final Color? backgroundColor = isDark
       ? style.color
       : const Color(0x00000000);
 
-    final Color selectedBackgroundColor = isDark
+    final Color? selectedBackgroundColor = isDark
       ? activeStyle.color
       : const Color(0x00000000);
 
     return Padding(
-      padding: effectiveStyle.margin,
+      padding: effectiveStyle.margin!,
       child: RawChip(
         padding: effectiveStyle.padding,
         label: label ?? Text(data.label),
@@ -116,12 +116,12 @@ class C2Chip<T> extends StatelessWidget {
           style: effectiveStyle.avatarBorderStyle,
         ),
         tooltip: data.tooltip,
-        shape: effectiveStyle.borderShape ?? getShapeBorder(
+        shape: effectiveStyle.borderShape as OutlinedBorder? ?? getShapeBorder(
           color: effectiveStyle.borderColor ?? borderColor,
           width: effectiveStyle.borderWidth,
           radius: effectiveStyle.borderRadius,
           style: effectiveStyle.borderStyle,
-        ),
+        ) as OutlinedBorder?,
         clipBehavior: effectiveStyle.clipBehavior ?? Clip.none,
         elevation: effectiveStyle.elevation ?? 0,
         pressElevation: effectiveStyle.pressElevation ?? 0,
@@ -135,7 +135,7 @@ class C2Chip<T> extends StatelessWidget {
         disabledColor: effectiveStyle.disabledColor ?? Colors.blueGrey.withOpacity(.1),
         isEnabled: data.disabled != true,
         selected: data.selected,
-        onSelected: (_selected) => data.select(_selected),
+        onSelected: (_selected) => data.select!(_selected),
       ),
     );
   }
