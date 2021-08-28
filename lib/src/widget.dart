@@ -351,7 +351,7 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
         crossAxisAlignment: widget.crossAxisAlignment,
         mainAxisAlignment: widget.mainAxisAlignment,
         mainAxisSize: widget.mainAxisSize,
-        children: choiceChips as List<Widget>,
+        children: choiceChips,
       ),
     );
   }
@@ -359,7 +359,7 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
   Widget get listScrollableVertical {
     return ListView.builder(
       itemCount: choiceItems!.length,
-      itemBuilder: (context, i) => choiceChipsGenerator(i)!,
+      itemBuilder: (context, i) => choiceChipsGenerator(i),
     );
   }
 
@@ -377,20 +377,20 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
         spacing: widget.spacing, // gap between adjacent chips
         runSpacing: widget.runSpacing, // gap between lines
         clipBehavior: widget.clipBehavior,
-        children: choiceChips as List<Widget>,
+        children: choiceChips,
       ),
     );
   }
 
   /// generate the choice chips
-  List<Widget?> get choiceChips {
-    return List<Widget?>.generate(choiceItems!.length, choiceChipsGenerator)
-        .where((e) => e != null)
+  List<Widget> get choiceChips {
+    return List<Widget>.generate(choiceItems!.length, choiceChipsGenerator)
+        .where((e) => e != Container())
         .toList();
   }
 
   /// choice chips generator
-  Widget? choiceChipsGenerator(int i) {
+  Widget choiceChipsGenerator(int i) {
     final C2Choice<T> item = choiceItems![i].copyWith(
       selected: widget._isMultiChoice
           ? widget._values!.contains(choiceItems![i].value)
@@ -412,7 +412,7 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
               label: widget.choiceLabelBuilder?.call(item),
               avatar: widget.choiceAvatarBuilder?.call(item),
             )
-        : null;
+        : Container();
   }
 
   /// return the selection function
