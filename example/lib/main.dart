@@ -19,28 +19,33 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   // single choice value
-  int tag = 1;
+  int tag = 3;
 
   // multiple choice value
   List<String> tags = [];
 
   // list of string options
   List<String> options = [
-    'News', 'Entertainment', 'Politics',
-    'Automotive', 'Sports', 'Education',
-    'Fashion', 'Travel', 'Food', 'Tech',
+    'News',
+    'Entertainment',
+    'Politics',
+    'Automotive',
+    'Sports',
+    'Education',
+    'Fashion',
+    'Travel',
+    'Food',
+    'Tech',
     'Science',
   ];
 
-  String user;
+  String? user;
   final usersMemoizer = AsyncMemoizer<List<C2Choice<String>>>();
 
   // Create a global key that uniquely identifies the Form widget
@@ -49,15 +54,17 @@ class _MyHomePageState extends State<MyHomePage> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final formKey = GlobalKey<FormState>();
-  List<String> formValue;
+  List<String>? formValue;
 
   Future<List<C2Choice<String>>> getUsers() async {
-    String url = "https://randomuser.me/api/?inc=gender,name,nat,picture,email&results=25";
+    String url =
+        "https://randomuser.me/api/?inc=gender,name,nat,picture,email&results=25";
     Response res = await Dio().get(url);
     return C2Choice.listFrom<String, dynamic>(
       source: res.data['results'],
       value: (index, item) => item['email'],
-      label: (index, item) => item['name']['first'] + ' ' + item['name']['last'],
+      label: (index, item) =>
+          item['name']['first'] + ' ' + item['name']['last'],
       meta: (index, item) => item,
     )..insert(0, C2Choice<String>(value: 'all', label: 'All'));
   }
@@ -109,7 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   Content(
-                    title: 'Wrapped List Single Choice and Custom Border Radius',
+                    title:
+                        'Wrapped List Single Choice and Custom Border Radius',
                     child: ChipsChoice<int>.single(
                       value: tag,
                       onChanged: (val) => setState(() => tag = val),
@@ -120,13 +128,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         tooltip: (i, v) => v,
                       ),
                       choiceStyle: C2ChoiceStyle(
-                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
                       ),
                       wrapped: true,
                     ),
                   ),
                   Content(
-                    title: 'Wrapped List Multiple Choice and Right to Left Text Direction',
+                    title:
+                        'Wrapped List Multiple Choice and Right to Left Text Direction',
                     child: ChipsChoice<String>.multiple(
                       value: tags,
                       onChanged: (val) => setState(() => tags = val),
@@ -165,7 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => v,
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
-                        hidden: (i, v) => ['Science', 'Politics', 'News', 'Tech'].contains(v),
+                        hidden: (i, v) =>
+                            ['Science', 'Politics', 'News', 'Tech'].contains(v),
                       ),
                       wrapped: true,
                     ),
@@ -181,22 +192,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
                         style: (i, v) {
-                          if (['Science', 'Politics', 'News', 'Tech'].contains(v)) {
+                          if (['Science', 'Politics', 'News', 'Tech']
+                              .contains(v)) {
                             return C2ChoiceStyle(
-                              borderRadius: const BorderRadius.all(Radius.circular(5)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
                               showCheckmark: false,
                             );
                           }
                           return null;
                         },
                         activeStyle: (i, v) {
-                          if (['Science', 'Politics', 'News', 'Tech'].contains(v)) {
-                            return C2ChoiceStyle(
-                              brightness: Brightness.dark
-                            );
+                          if (['Science', 'Politics', 'News', 'Tech']
+                              .contains(v)) {
+                            return C2ChoiceStyle(brightness: Brightness.dark);
                           }
                           return null;
-                        }
+                        },
                       ),
                       wrapped: true,
                     ),
@@ -227,18 +239,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       )..insert(0, C2Choice<int>(value: -1, label: 'All')),
                       choiceStyle: C2ChoiceStyle(
                         showCheckmark: false,
-                        labelStyle: const TextStyle(
-                          fontSize: 20
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                        labelStyle: const TextStyle(fontSize: 20),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
                         borderColor: Colors.blueGrey.withOpacity(.5),
                       ),
                       choiceActiveStyle: const C2ChoiceStyle(
                         brightness: Brightness.dark,
                         borderShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          side: BorderSide(color: Colors.red)
-                        ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            side: BorderSide(color: Colors.red)),
                       ),
                     ),
                   ),
@@ -248,17 +258,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       initialData: [],
                       future: usersMemoizer.runOnce(getUsers),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const Padding(
                             padding: EdgeInsets.all(20),
                             child: Center(
                               child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                )
-                              ),
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  )),
                             ),
                           );
                         } else {
@@ -280,7 +290,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               choiceAvatarBuilder: (data) {
                                 if (data.meta == null) return null;
                                 return CircleAvatar(
-                                  backgroundImage: NetworkImage(data.meta['picture']['thumbnail']),
+                                  backgroundImage: NetworkImage(
+                                      data.meta['picture']['thumbnail']),
                                 );
                               },
                             );
@@ -317,7 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       choiceAvatarBuilder: (data) {
                         if (data.meta == null) return null;
                         return CircleAvatar(
-                          backgroundImage: NetworkImage(data.meta['picture']['thumbnail']),
+                          backgroundImage:
+                              NetworkImage(data.meta['picture']['thumbnail']),
                         );
                       },
                     ),
@@ -329,14 +341,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         children: [
                           FormField<List<String>>(
-                            autovalidate: true,
+                            autovalidateMode: AutovalidateMode.always,
                             initialValue: formValue,
                             onSaved: (val) => setState(() => formValue = val),
                             validator: (value) {
                               if (value?.isEmpty ?? value == null) {
                                 return 'Please select some categories';
                               }
-                              if (value.length > 5) {
+                              if (value!.length > 5) {
                                 return "Can't select more than 5 categories";
                               }
                               return null;
@@ -349,7 +361,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: ChipsChoice<String>.multiple(
                                       value: state.value,
                                       onChanged: (val) => state.didChange(val),
-                                      choiceItems: C2Choice.listFrom<String, String>(
+                                      choiceItems:
+                                          C2Choice.listFrom<String, String>(
                                         source: options,
                                         value: (i, v) => v.toLowerCase(),
                                         label: (i, v) => v,
@@ -367,16 +380,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15, 0, 15, 10),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      state.errorText ?? state.value.length.toString() + '/5 selected',
+                                      state.errorText ??
+                                          state.value!.length.toString() +
+                                              '/5 selected',
                                       style: TextStyle(
-                                        color: state.hasError
-                                          ? Colors.redAccent
-                                          : Colors.green
-                                      ),
-                                    )
+                                          color: state.hasError
+                                              ? Colors.redAccent
+                                              : Colors.green),
+                                    ),
                                   )
                                 ],
                               );
@@ -386,31 +401,31 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const Text('Selected Value:'),
-                                      SizedBox(height: 5),
-                                      Text('${formValue.toString()}')
-                                    ]
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                RaisedButton(
-                                  child: const Text('Submit'),
-                                  color: Colors.blueAccent,
-                                  textColor: Colors.white,
+                                ElevatedButton(
                                   onPressed: () {
                                     // Validate returns true if the form is valid, or false otherwise.
-                                    if (formKey.currentState.validate()) {
+                                    if (formKey.currentState!.validate()) {
                                       // If the form is valid, save the value.
-                                      formKey.currentState.save();
+                                      formKey.currentState!.save();
                                     }
-                                  }
+                                  },
+                                  child: const Text('Submit'),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Text('Submitted Value:'),
+                                      SizedBox(height: 5),
+                                      Text('${formValue.toString()}')
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -435,7 +450,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 70,
                           height: 100,
                           selected: item.selected,
-                          onSelect: item.select
+                          onSelect: item.select!,
                         );
                       },
                     ),
@@ -464,7 +479,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.redAccent,
                       margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                       selected: item.selected,
-                      onSelect: item.select
+                      onSelect: item.select!,
                     );
                   },
                   direction: Axis.vertical,
@@ -479,24 +494,23 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class CustomChip extends StatelessWidget {
-
   final String label;
-  final Color color;
-  final double width;
-  final double height;
-  final EdgeInsetsGeometry margin;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final EdgeInsetsGeometry? margin;
   final bool selected;
   final Function(bool selected) onSelect;
 
   CustomChip({
-    Key key,
-    this.label,
+    Key? key,
+    required this.label,
     this.color,
     this.width,
     this.height,
     this.margin,
-    this.selected,
-    this.onSelect,
+    this.selected = false,
+    required this.onSelect,
   }) : super(key: key);
 
   @override
@@ -504,10 +518,7 @@ class CustomChip extends StatelessWidget {
     return AnimatedContainer(
       width: this.width,
       height: this.height,
-      margin: margin ?? const EdgeInsets.symmetric(
-        vertical: 15,
-        horizontal: 5,
-      ),
+      margin: margin ?? const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         color: selected ? (color ?? Colors.green) : Colors.transparent,
@@ -528,7 +539,7 @@ class CustomChip extends StatelessWidget {
                 Icons.check_circle_outline,
                 color: Colors.white,
                 size: 32,
-              )
+              ),
             ),
             Positioned(
               left: 9,
@@ -553,22 +564,21 @@ class CustomChip extends StatelessWidget {
 }
 
 class Content extends StatefulWidget {
-
   final String title;
   final Widget child;
 
   Content({
-    Key key,
-    @required this.title,
-    @required this.child,
+    Key? key,
+    required this.title,
+    required this.child,
   }) : super(key: key);
 
   @override
   _ContentState createState() => _ContentState();
 }
 
-class _ContentState extends State<Content> with AutomaticKeepAliveClientMixin<Content>  {
-
+class _ContentState extends State<Content>
+    with AutomaticKeepAliveClientMixin<Content> {
   @override
   bool get wantKeepAlive => true;
 
@@ -591,14 +601,11 @@ class _ContentState extends State<Content> with AutomaticKeepAliveClientMixin<Co
               widget.title,
               style: const TextStyle(
                 color: Colors.blueGrey,
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          Flexible(
-            fit: FlexFit.loose,
-            child: widget.child
-          ),
+          Flexible(fit: FlexFit.loose, child: widget.child),
         ],
       ),
     );
@@ -615,7 +622,10 @@ void _about(BuildContext context) {
           ListTile(
             title: Text(
               'chips_choice',
-              style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5!
+                  .copyWith(color: Colors.black87),
             ),
             subtitle: const Text('by davigmacode'),
             trailing: IconButton(
@@ -632,7 +642,10 @@ void _about(BuildContext context) {
                 children: <Widget>[
                   Text(
                     'Easy way to provide a single or multiple choice chips.',
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.black54),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(color: Colors.black54),
                   ),
                   Container(height: 15),
                 ],
