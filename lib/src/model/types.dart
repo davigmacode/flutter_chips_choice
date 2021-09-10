@@ -8,4 +8,4 @@ typedef void C2Changed<T>(T value);
 typedef Future<List<C2Choice<T>>> C2ChoiceLoader<T>();
 
 /// Builder for custom choice item
-typedef Widget C2Builder<T>(C2Choice<T> item);
+typedef Widget? C2Builder<T>(C2Choice<T> item);
