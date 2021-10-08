@@ -349,6 +349,7 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
   /// the scrollable list
   Widget get listScrollable {
     return SingleChildScrollView(
+      primary: false,
       padding: widget.padding ?? ChipsChoice.defaultScrollablePadding,
       scrollDirection: widget.direction,
       clipBehavior: widget.clipBehavior,
@@ -368,6 +369,7 @@ class ChipsChoiceState<T> extends State<ChipsChoice<T>> {
 
   Widget get listScrollableVertical {
     return ListView.builder(
+      primary: false,
       itemCount: choiceItems!.length,
       itemBuilder: (context, i) => choiceChipsGenerator(i)!,
     );
