@@ -43,7 +43,7 @@ Lite version of [smart_select](https://pub.dev/packages/smart_select) package, z
 
 ## Usage
 
-For a complete usage, please see the [example](https://pub.dev/packages/chips_choice#-example-tab-).
+For a complete usage, please see the [example](https://pub.dev/packages/chips_choice/example).
 
 To read more about classes and other references used by `chips_choice`, see the [API Reference](https://pub.dev/documentation/chips_choice/latest/).
 
