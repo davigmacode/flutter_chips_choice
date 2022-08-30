@@ -1,6 +1,7 @@
+import 'dart:ui';
 import 'choice_style.dart';
 
-/// Choice option
+/// Choice item
 class C2Choice<T> {
   /// Value to return
   final T value;
@@ -56,10 +57,22 @@ class C2Choice<T> {
       identical(this, other) ||
       other is C2Choice &&
           runtimeType == other.runtimeType &&
-          value == other.value;
+          value == other.value &&
+          label == other.label &&
+          tooltip == other.tooltip &&
+          disabled == other.disabled &&
+          hidden == other.hidden &&
+          selected == other.selected;
 
   @override
-  int get hashCode => value.hashCode;
+  int get hashCode => hashValues(
+        value,
+        label,
+        tooltip,
+        disabled,
+        hidden,
+        selected,
+      );
 
   /// Helper to create choice items from any list
   static List<C2Choice<R>> listFrom<R, E>({
@@ -72,24 +85,28 @@ class C2Choice<T> {
     _C2ChoiceProp<E, dynamic>? meta,
     _C2ChoiceProp<E, C2ChoiceStyle>? style,
     _C2ChoiceProp<E, C2ChoiceStyle>? activeStyle,
-  }) =>
-      source
-          .asMap()
-          .map((index, item) => MapEntry(
-              index,
-              C2Choice<R>(
-                value: value.call(index, item),
-                label: label.call(index, item),
-                tooltip: tooltip?.call(index, item),
-                disabled: disabled?.call(index, item) ?? false,
-                hidden: hidden?.call(index, item) ?? false,
-                meta: meta?.call(index, item),
-                style: style?.call(index, item),
-                activeStyle: activeStyle?.call(index, item),
-              )))
-          .values
-          .toList()
-          .cast<C2Choice<R>>();
+  }) {
+    return source
+        .asMap()
+        .map((index, item) {
+          return MapEntry(
+            index,
+            C2Choice<R>(
+              value: value.call(index, item),
+              label: label.call(index, item),
+              tooltip: tooltip?.call(index, item),
+              disabled: disabled?.call(index, item) ?? false,
+              hidden: hidden?.call(index, item) ?? false,
+              meta: meta?.call(index, item),
+              style: style?.call(index, item),
+              activeStyle: activeStyle?.call(index, item),
+            ),
+          );
+        })
+        .values
+        .toList()
+        .cast<C2Choice<R>>();
+  }
 
   /// Creates a copy of this [C2Choice] but with
   /// the given fields replaced with the new values.

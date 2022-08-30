@@ -7,11 +7,11 @@ class C2Chip<T> extends StatelessWidget {
   /// choice item data
   final C2Choice<T> data;
 
-  /// unselected choice style
-  final C2ChoiceStyle style;
+  // /// unselected choice style
+  // final C2ChoiceStyle style;
 
-  /// selected choice style
-  final C2ChoiceStyle activeStyle;
+  // /// selected choice style
+  // final C2ChoiceStyle activeStyle;
 
   /// label widget
   final Widget? label;
@@ -23,8 +23,8 @@ class C2Chip<T> extends StatelessWidget {
   const C2Chip({
     Key? key,
     required this.data,
-    required this.style,
-    required this.activeStyle,
+    // required this.style,
+    // required this.activeStyle,
     this.label,
     this.avatar,
   }) : super(key: key);
@@ -72,28 +72,40 @@ class C2Chip<T> extends StatelessWidget {
   /// default border opacity
   static final double defaultBorderOpacity = .2;
 
-  @override
-  Widget build(BuildContext context) {
-    final C2ChoiceStyle effectiveStyle = data.selected ? activeStyle : style;
+  /// whether the chip is selected or not
+  bool get selected => data.selected;
 
-    final bool isDark = effectiveStyle.brightness == Brightness.dark;
+  /// unselected choice style
+  C2ChoiceStyle get style => data.style!;
 
-    final Color textColor =
-        isDark ? const Color(0xFFFFFFFF) : effectiveStyle.color!;
+  /// selected choice style
+  C2ChoiceStyle get activeStyle => data.activeStyle!;
 
-    final Color borderColor = isDark
+  C2ChoiceStyle get effectiveStyle => selected ? activeStyle : style;
+
+  bool get isDark => effectiveStyle.brightness == Brightness.dark;
+
+  Color get textColor {
+    return isDark ? const Color(0xFFFFFFFF) : effectiveStyle.color!;
+  }
+
+  Color get borderColor {
+    return isDark
         ? const Color(0x00000000)
         : textColor
             .withOpacity(effectiveStyle.borderOpacity ?? defaultBorderOpacity);
+  }
 
-    final Color checkmarkColor = isDark ? textColor : activeStyle.color!;
+  Color get checkmarkColor => isDark ? textColor : activeStyle.color!;
 
-    final Color backgroundColor =
-        isDark ? style.color! : const Color(0x00000000);
+  Color get backgroundColor => isDark ? style.color! : const Color(0x00000000);
 
-    final Color selectedBackgroundColor =
-        isDark ? activeStyle.color! : const Color(0x00000000);
+  Color get selectedBackgroundColor {
+    return isDark ? activeStyle.color! : const Color(0x00000000);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: effectiveStyle.margin!,
       child: RawChip(
