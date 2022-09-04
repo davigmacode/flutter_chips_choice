@@ -128,6 +128,9 @@ class ChipsChoice<T> extends StatefulWidget {
   /// Called when value changed in multiple choice widget
   final C2Changed<List<T>>? multiOnChanged;
 
+  /// Used when the choice items is scrollable or [wrapped] is not [true]
+  final ScrollController? scrollController;
+
   /// Constructor for single choice
   ///
   /// The [value] is current selected value
@@ -199,6 +202,8 @@ class ChipsChoice<T> extends StatefulWidget {
   /// The [spinnerColor] is color of the default spinner widget
   ///
   /// The [spinnerThickness] is thickness of the default spinner widget
+  ///
+  /// The [scrollController] used when the choice items is scrollable or [wrapped] is not [true]
   ChipsChoice.single({
     Key? key,
     required T? value,
@@ -236,6 +241,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerSize,
     this.spinnerColor,
     this.spinnerThickness,
+    this.scrollController,
   })  : assert(
           choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',
@@ -318,6 +324,8 @@ class ChipsChoice<T> extends StatefulWidget {
   /// The [spinnerColor] is color of the default spinner widget
   ///
   /// The [spinnerThickness] is thickness of the default spinner widget
+  ///
+  /// The [scrollController] used when the choice items is scrollable or [wrapped] is not [true]
   ChipsChoice.multiple({
     Key? key,
     required List<T>? value,
@@ -355,6 +363,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerSize,
     this.spinnerColor,
     this.spinnerThickness,
+    this.scrollController,
   })  : assert(
           choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',

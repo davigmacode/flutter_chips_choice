@@ -46,7 +46,8 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   /// Context of the selected choice item
   BuildContext? selectedContext;
 
-  final scrollController = ScrollController();
+  ScrollController get scrollController =>
+      widget.scrollController ?? ScrollController();
 
   /// Function to select a value
   void select(T val, {bool selected = true});
@@ -67,8 +68,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
     /// initial load choice items
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-      loadChoiceItems(ensureSelectedVisibility: true)
-          .then((value) => scrollToSelected());
+      loadChoiceItems(ensureSelectedVisibility: true);
     });
   }
 
@@ -89,7 +89,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   }
 
   /// load the choice items
-  Future<void> loadChoiceItems({ensureSelectedVisibility = false}) async {
+  void loadChoiceItems({ensureSelectedVisibility = false}) async {
     try {
       setState(() {
         error = null;
@@ -105,6 +105,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
       setState(() => error = e as Error?);
     } finally {
       setState(() => loading = false);
+      if (ensureSelectedVisibility == true) scrollToSelected();
     }
   }
 
