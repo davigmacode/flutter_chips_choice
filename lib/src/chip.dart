@@ -83,7 +83,7 @@ class C2Chip<T> extends StatelessWidget {
 
     final Brightness? brightness = style?.brightness ?? chipTheme.brightness;
 
-    final bool isDark = brightness == Brightness.dark;
+    // final bool isDark = brightness == Brightness.dark;
 
     final bool isElevated = style?.isElevated ?? false;
 
