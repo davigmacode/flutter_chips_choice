@@ -14,7 +14,7 @@ part 'widget_utils.dart';
 /// Easy way to provide a single or multiple choice chips
 class ChipsChoice<T> extends StatefulWidget {
   /// List of choice item
-  final List<C2Choice<T>>? choiceItems;
+  final List<C2Choice<T>> choiceItems;
 
   /// Function to load the choice items
   final C2ChoiceLoader<T>? choiceLoader;
@@ -203,7 +203,7 @@ class ChipsChoice<T> extends StatefulWidget {
     Key? key,
     required T? value,
     required C2Changed<T> onChanged,
-    required this.choiceItems,
+    this.choiceItems = const [],
     this.choiceLoader,
     this.choiceStyle,
     this.choiceActiveStyle,
@@ -237,7 +237,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerColor,
     this.spinnerThickness,
   })  : assert(
-          choiceItems != null || choiceLoader != null,
+          choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',
         ),
         isMultiChoice = false,
@@ -322,7 +322,7 @@ class ChipsChoice<T> extends StatefulWidget {
     Key? key,
     required List<T>? value,
     required C2Changed<List<T>> onChanged,
-    required this.choiceItems,
+    this.choiceItems = const [],
     this.choiceLoader,
     this.choiceStyle,
     this.choiceActiveStyle,
@@ -356,7 +356,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerColor,
     this.spinnerThickness,
   })  : assert(
-          choiceItems != null || choiceLoader != null,
+          choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',
         ),
         isMultiChoice = true,

@@ -37,6 +37,9 @@ class C2Choice<T> {
   /// used in choice builder
   final bool selected;
 
+  /// Return the style based on selected or not
+  C2ChoiceStyle? get effectiveStyle => selected ? activeStyle : style;
+
   /// Default Constructor
   const C2Choice({
     required this.value,

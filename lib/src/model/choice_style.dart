@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+/// Type of what the choice state can do
+enum C2ChipType {
+  /// indicates the choices try to loading items at the first time
+  elevated,
+
+  /// indicates the choices try to refreshing items
+  outlined,
+
+  /// indicates the choices try to appending items
+  flatten,
+}
+
 /// Choice item style configuration
 class C2ChoiceStyle {
   /// Item color
@@ -13,10 +25,27 @@ class C2ChoiceStyle {
   /// Defaults to 4 logical pixels on all sides.
   final EdgeInsetsGeometry? padding;
 
+  /// The Chip Appearance
+  final C2ChipType appearance;
+
+  /// Whether the chip appearance is raised or not
+  bool get isElevated => appearance == C2ChipType.elevated;
+
+  /// Whether the chip appearance is outlined or not
+  bool get isOutlined => appearance == C2ChipType.outlined;
+
+  /// Whether the chip appearance is outlined or not
+  bool get isFlatten => appearance == C2ChipType.flatten;
+
+  /// If [isOutlined] is [true] this value becomes the border opacity, defaults to `0.3`
+  ///
+  /// If [isFlatten] is [true] this value becomes the background opacity, defaults to `0.12`
+  final double? opacity;
+
   /// Chips elevation
   final double? elevation;
 
-  /// Longpress chips elevation
+  /// Long press chips elevation
   final double? pressElevation;
 
   /// whether the chips use checkmark or not
@@ -82,11 +111,57 @@ class C2ChoiceStyle {
   /// It defaults to [Colors.black38].
   final Color? disabledColor;
 
+  /// Whether the brightness is [Brightness.dark] or not
+  bool get isDark => brightness == Brightness.dark;
+
+  /// Whether the brightness is [Brightness.dark] or not
+  bool get isLight => brightness == Brightness.light;
+
+  double get effectiveBorderOpacity {
+    return borderOpacity ?? opacity ?? 0.3;
+  }
+
+  double get effectiveBackgroundOpacity {
+    return opacity ?? 0.12;
+  }
+
+  /// Return the effective border shape
+  OutlinedBorder get effectiveBorderShape {
+    final BorderSide side = BorderSide(
+      color: borderColor ?? Colors.black54,
+      width: borderWidth ?? 1.0,
+      style: borderStyle ?? BorderStyle.solid,
+    );
+    return borderRadius == null
+        ? StadiumBorder(side: side)
+        : RoundedRectangleBorder(
+            borderRadius: borderRadius!,
+            side: side,
+          );
+  }
+
+  /// Return the effective avatar shape
+  ShapeBorder get effectiveAvatarShape {
+    final BorderSide side = BorderSide(
+      color: avatarBorderColor ?? Colors.black54,
+      width: avatarBorderWidth ?? 1.0,
+      style: avatarBorderStyle ?? BorderStyle.none,
+    );
+    return avatarBorderRadius == null
+        ? CircleBorder(side: side)
+        : RoundedRectangleBorder(
+            borderRadius: avatarBorderRadius!,
+            side: side,
+          );
+  }
+
   /// Default Constructor
   const C2ChoiceStyle({
     this.color,
     this.margin,
     this.padding,
+    this.appearance = C2ChipType.flatten,
+    this.opacity,
     this.elevation,
     this.pressElevation,
     this.showCheckmark,
@@ -115,6 +190,8 @@ class C2ChoiceStyle {
     Color? color,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
+    C2ChipType? appearance,
+    double? opacity,
     double? elevation,
     double? pressElevation,
     bool? showCheckmark,
@@ -140,6 +217,8 @@ class C2ChoiceStyle {
       color: color ?? this.color,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
+      appearance: appearance ?? this.appearance,
+      opacity: opacity ?? this.opacity,
       elevation: elevation ?? this.elevation,
       pressElevation: pressElevation ?? this.pressElevation,
       showCheckmark: showCheckmark ?? this.showCheckmark,
@@ -174,6 +253,8 @@ class C2ChoiceStyle {
       color: other.color,
       margin: other.margin,
       padding: other.padding,
+      appearance: other.appearance,
+      opacity: other.opacity,
       elevation: other.elevation,
       pressElevation: other.pressElevation,
       showCheckmark: other.showCheckmark,

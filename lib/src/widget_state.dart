@@ -17,9 +17,6 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   /// Called when value changed
   get onChanged;
 
-  /// Current general theme
-  ThemeData get theme => Theme.of(context);
-
   /// Default chip margin
   EdgeInsetsGeometry get defaultChipMargin => isScrollable
       ? ChipsChoice.defaultScrollableChipMargin
@@ -28,21 +25,17 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   /// Default style for unselected choice item
   C2ChoiceStyle get defaultChoiceStyle => C2ChoiceStyle(
         margin: defaultChipMargin,
-        color: theme.unselectedWidgetColor,
       );
 
   /// Default style for selected choice item
-  C2ChoiceStyle get defaultActiveChoiceStyle => C2ChoiceStyle(
-        margin: defaultChipMargin,
-        color: theme.primaryColor,
-      );
+  C2ChoiceStyle get defaultActiveChoiceStyle => defaultChoiceStyle;
 
   /// Placeholder string
   String get placeholder =>
       widget.placeholder ?? ChipsChoice.defaultPlaceholder;
 
   /// Choice items
-  List<C2Choice<T>>? choiceItems;
+  late List<C2Choice<T>> choiceItems;
 
   /// Whether the choice items is loading or not
   bool loading = true;
@@ -74,7 +67,8 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
     /// initial load choice items
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-      loadChoiceItems(ensureSelectedVisibility: true);
+      loadChoiceItems(ensureSelectedVisibility: true)
+          .then((value) => scrollToSelected());
     });
   }
 
@@ -82,38 +76,41 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   void didUpdateWidget(ChipsChoice<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (!listEquals(oldWidget.choiceItems, widget.choiceItems) ||
-        oldWidget.choiceLoader != widget.choiceLoader) {
+    if (oldWidget.singleValue != widget.singleValue ||
+        oldWidget.multiValue != widget.multiValue ||
+        oldWidget.singleOnChanged != widget.singleOnChanged ||
+        oldWidget.multiOnChanged != widget.multiOnChanged ||
+        !listEquals(oldWidget.choiceItems, widget.choiceItems) ||
+        oldWidget.choiceLoader != widget.choiceLoader ||
+        oldWidget.choiceStyle != widget.choiceStyle ||
+        oldWidget.choiceActiveStyle != widget.choiceActiveStyle) {
       loadChoiceItems();
     }
   }
 
   /// load the choice items
-  void loadChoiceItems({ensureSelectedVisibility = false}) async {
+  Future<void> loadChoiceItems({ensureSelectedVisibility = false}) async {
     try {
       setState(() {
         error = null;
         loading = true;
       });
       if (widget.choiceLoader != null) {
-        final List<C2Choice<T>>? items = await widget.choiceLoader!();
+        final List<C2Choice<T>> items = await widget.choiceLoader!();
         setChoiceItems(items);
-        // setState(() => choiceItems = items);
       } else {
         setChoiceItems(widget.choiceItems);
-        // setState(() => choiceItems = widget.choiceItems);
       }
     } catch (e) {
       setState(() => error = e as Error?);
     } finally {
       setState(() => loading = false);
-      // if (ensureSelectedVisibility) scrollToSelected();
     }
   }
 
-  void setChoiceItems(List<C2Choice<T>>? _choiceItems) {
+  void setChoiceItems(List<C2Choice<T>> _choiceItems) {
     setState(() => choiceItems = _choiceItems
-        ?.map((e) => e.copyWith(
+        .map((e) => e.copyWith(
               style:
                   defaultChoiceStyle.merge(widget.choiceStyle).merge(e.style),
               activeStyle: defaultActiveChoiceStyle
@@ -139,28 +136,30 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsetsGeometry padding =
+        widget.padding ?? ChipsChoice.defaultPadding;
     return loading == true
         ? C2Spinner(
-            padding: widget.padding ?? ChipsChoice.defaultPadding,
+            padding: padding,
             size: widget.spinnerSize,
             color: widget.spinnerColor,
             thickness: widget.spinnerThickness,
           )
-        : choiceItems != null && choiceItems!.isNotEmpty
+        : choiceItems.isNotEmpty
             ? isScrollable
                 ? listScrollable
                 : listWrapped
             : error != null
                 ? widget.errorBuilder?.call(context) ??
                     C2Placeholder(
-                      padding: widget.padding ?? ChipsChoice.defaultPadding,
+                      padding: padding,
                       style: widget.errorStyle,
                       align: widget.errorAlign,
                       message: error.toString(),
                     )
                 : widget.placeholderBuilder?.call(context) ??
                     C2Placeholder(
-                      padding: widget.padding ?? ChipsChoice.defaultPadding,
+                      padding: padding,
                       style: widget.placeholderStyle,
                       align: widget.placeholderAlign,
                       message: placeholder,
@@ -209,12 +208,12 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
   /// List of widget of the choice items
   List<Widget> get choiceChips {
-    return List<Widget>.generate(choiceItems!.length, choiceChipsGenerator);
+    return List<Widget>.generate(choiceItems.length, choiceChipsGenerator);
   }
 
   /// Widget generator for choice items
   Widget choiceChipsGenerator(int i) {
-    final C2Choice<T> item = choiceItems![i];
+    final C2Choice<T> item = choiceItems[i];
     return item.hidden == true
         ? Container()
         : Builder(
@@ -224,14 +223,6 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
                   C2Chip(
                     key: ValueKey('${item.value} - ${item.selected}'),
                     data: item,
-                    // style: defaultChoiceStyle
-                    //     .merge(widget.choiceStyle)
-                    //     .merge(item.style),
-                    // activeStyle: defaultActiveChoiceStyle
-                    //     .merge(widget.choiceStyle)
-                    //     .merge(item.style)
-                    //     .merge(widget.choiceActiveStyle)
-                    //     .merge(item.activeStyle),
                     label: widget.choiceLabelBuilder?.call(item),
                     avatar: widget.choiceAvatarBuilder?.call(item),
                   );
