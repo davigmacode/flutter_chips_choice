@@ -1,34 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
+import 'package:theme_patrol/theme_patrol.dart';
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter ChipsChoice',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+    return ThemePatrol(
+      light: ThemeData(
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.light,
+          seedColor: Colors.red,
+        ),
       ),
-      home: MyHomePage(),
+      dark: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.dark,
+          seedColor: Colors.red,
+        ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      mode: ThemeMode.system,
+      builder: (context, theme) {
+        return MaterialApp(
+          title: 'Smart Select',
+          theme: theme.light,
+          darkTheme: theme.dark,
+          themeMode: theme.mode,
+          home: const MyHomePage(),
+        );
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   // single choice value
   int tag = 3;
 
   // multiple choice value
-  List<String> tags = [];
+  List<String> tags = ['Education'];
 
   // list of string options
   List<String> options = [
@@ -66,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       label: (index, item) =>
           item['name']['first'] + ' ' + item['name']['last'],
       meta: (index, item) => item,
-    )..insert(0, C2Choice<String>(value: 'all', label: 'All'));
+    )..insert(0, const C2Choice<String>(value: 'all', label: 'All'));
   }
 
   @override
@@ -75,10 +100,21 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Flutter ChipsChoice'),
         actions: <Widget>[
+          Switch(
+            // This bool value toggles the switch.
+            value: ThemePatrol.of(context).isDarkMode,
+            onChanged: (bool value) {
+              if (value) {
+                ThemePatrol.of(context).setDarkMode();
+              } else {
+                ThemePatrol.of(context).setLightMode();
+              }
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: () => _about(context),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -100,6 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
                       ),
+                      // choiceStyle: const C2ChoiceStyle(
+                      //   appearance: C2ChipType.elevated,
+                      // ),
+                      choiceActiveStyle: C2ChoiceStyle(
+                        appearance: C2ChipType.elevated,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                   Content(
@@ -112,6 +155,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => v,
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
+                      ),
+                      choiceStyle: const C2ChoiceStyle(
+                        appearance: C2ChipType.outlined,
+                        showCheckmark: true,
                       ),
                     ),
                   ),
@@ -127,9 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
                       ),
-                      choiceStyle: C2ChoiceStyle(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
+                      choiceStyle: const C2ChoiceStyle(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
                       ),
                       wrapped: true,
                     ),
@@ -194,9 +242,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: (i, v) {
                           if (['Science', 'Politics', 'News', 'Tech']
                               .contains(v)) {
-                            return C2ChoiceStyle(
+                            return const C2ChoiceStyle(
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
+                                  BorderRadius.all(Radius.circular(5)),
                               showCheckmark: false,
                             );
                           }
@@ -205,7 +253,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         activeStyle: (i, v) {
                           if (['Science', 'Politics', 'News', 'Tech']
                               .contains(v)) {
-                            return C2ChoiceStyle(brightness: Brightness.dark);
+                            return const C2ChoiceStyle(
+                                brightness: Brightness.dark);
                           }
                           return null;
                         },
@@ -223,7 +272,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => i,
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
-                      )..insert(0, C2Choice<int>(value: -1, label: 'All')),
+                      )..insert(
+                          0, const C2Choice<int>(value: -1, label: 'All')),
                     ),
                   ),
                   Content(
@@ -236,7 +286,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => i,
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
-                      )..insert(0, C2Choice<int>(value: -1, label: 'All')),
+                      )..insert(
+                          0, const C2Choice<int>(value: -1, label: 'All')),
                       choiceStyle: C2ChoiceStyle(
                         showCheckmark: false,
                         labelStyle: const TextStyle(fontSize: 20),
@@ -255,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Content(
                     title: 'Async Choice Items and Brightness Dark',
                     child: FutureBuilder<List<C2Choice<String>>>(
-                      initialData: [],
+                      initialData: const [],
                       future: usersMemoizer.runOnce(getUsers),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -276,11 +327,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             return ChipsChoice<String>.single(
                               value: user,
                               onChanged: (val) => setState(() => user = val),
-                              choiceItems: snapshot.data,
+                              choiceItems: snapshot.data ?? [],
                               choiceStyle: const C2ChoiceStyle(
                                 color: Colors.blueGrey,
                                 brightness: Brightness.dark,
-                                margin: const EdgeInsets.all(5),
+                                margin: EdgeInsets.all(5),
                                 showCheckmark: false,
                               ),
                               choiceActiveStyle: const C2ChoiceStyle(
@@ -313,12 +364,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: ChipsChoice<String>.single(
                       value: user,
                       onChanged: (val) => setState(() => user = val),
-                      choiceItems: null,
                       choiceLoader: getUsers,
                       choiceStyle: const C2ChoiceStyle(
                         color: Colors.blueGrey,
                         brightness: Brightness.dark,
-                        margin: const EdgeInsets.all(5),
+                        margin: EdgeInsets.all(5),
                         showCheckmark: false,
                       ),
                       choiceActiveStyle: const C2ChoiceStyle(
@@ -328,8 +378,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       choiceAvatarBuilder: (data) {
                         if (data.meta == null) return null;
                         return CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(data.meta['picture']['thumbnail']),
+                          backgroundImage: NetworkImage(
+                            data.meta['picture']['thumbnail'],
+                          ),
                         );
                       },
                     ),
@@ -385,8 +436,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       state.errorText ??
-                                          state.value!.length.toString() +
-                                              '/5 selected',
+                                          '${state.value!.length}/5 selected',
                                       style: TextStyle(
                                           color: state.hasError
                                               ? Colors.redAccent
@@ -397,7 +447,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               );
                             },
                           ),
-                          Divider(),
+                          const Divider(),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                             child: Row(
@@ -413,7 +463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   },
                                   child: const Text('Submit'),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
                                 Expanded(
@@ -422,8 +472,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       const Text('Submitted Value:'),
-                                      SizedBox(height: 5),
-                                      Text('${formValue.toString()}')
+                                      const SizedBox(height: 5),
+                                      Text(formValue.toString())
                                     ],
                                   ),
                                 ),
@@ -458,7 +508,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: 100,
               child: Content(
                 title: 'Vertical Direction',
@@ -502,7 +552,7 @@ class CustomChip extends StatelessWidget {
   final bool selected;
   final Function(bool selected) onSelect;
 
-  CustomChip({
+  const CustomChip({
     Key? key,
     required this.label,
     this.color,
@@ -516,8 +566,8 @@ class CustomChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      width: this.width,
-      height: this.height,
+      width: width,
+      height: height,
       margin: margin ?? const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
@@ -545,14 +595,12 @@ class CustomChip extends StatelessWidget {
               left: 9,
               right: 9,
               bottom: 7,
-              child: Container(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: selected ? Colors.white : Colors.black45,
-                  ),
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: selected ? Colors.white : Colors.black45,
                 ),
               ),
             ),
@@ -567,24 +615,19 @@ class Content extends StatefulWidget {
   final String title;
   final Widget child;
 
-  Content({
+  const Content({
     Key? key,
     required this.title,
     required this.child,
   }) : super(key: key);
 
   @override
-  _ContentState createState() => _ContentState();
+  ContentState createState() => ContentState();
 }
 
-class _ContentState extends State<Content>
-    with AutomaticKeepAliveClientMixin<Content> {
-  @override
-  bool get wantKeepAlive => true;
-
+class ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Card(
       elevation: 2,
       margin: const EdgeInsets.all(5),
@@ -596,11 +639,11 @@ class _ContentState extends State<Content>
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(15),
-            color: Colors.blueGrey[50],
+            // color: Colors.blueGrey[50],
             child: Text(
               widget.title,
               style: const TextStyle(
-                color: Colors.blueGrey,
+                // color: Colors.blueGrey,
                 fontWeight: FontWeight.w500,
               ),
             ),
