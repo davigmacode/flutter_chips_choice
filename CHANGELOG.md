@@ -1,3 +1,12 @@
+## 2.1.0-nullsafety.1
+
+* Improve performance
+* Value of multiple choice cannot be null
+* Fixed issue #37
+* Fixed wrapped chips run spacing on web
+* Improve async choices loader with asyncMemoizer
+* Provide `C2ChoiceMemoizer<T>` which is an alias to `AsyncMemoizer<List<C2Choice<T>>>`
+
 ## 2.1.0-nullsafety.0
 
 * Support sound null safety

@@ -35,25 +35,27 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
       widget.placeholder ?? ChipsChoice.defaultPlaceholder;
 
   /// Choice items
-  late List<C2Choice<T>> choiceItems;
+  List<C2Choice<T>> choiceItems = [];
+
+  /// Async memoizer for choice items
+  C2ChoiceMemoizer<T>? choiceItemsMemoizer;
+
+  bool get hasChoiceLoader => widget.choiceLoader != null;
+
+  bool get hasChoiceLoaderRun => choiceItemsMemoizer?.hasRun ?? false;
 
   /// Whether the choice items is loading or not
-  bool loading = true;
+  bool loading = false;
 
   /// Choice loader error
-  Error? error;
+  String error = '';
 
-  /// Context of the selected choice item
-  BuildContext? selectedContext;
-
-  ScrollController get scrollController =>
-      widget.scrollController ?? ScrollController();
+  late final ScrollController? scrollController;
 
   /// Function to select a value
   void select(T val, {bool selected = true});
 
-  /// Function to set the context of the selected choice item
-  void setSelectedContext(BuildContext context, C2Choice<T> choice);
+  late final GlobalKey? selectedKey;
 
   @override
   void setState(fn) {
@@ -66,8 +68,9 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   void initState() {
     super.initState();
 
-    /// initial load choice items
-    _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initController();
+      initSelectedKey();
       loadChoiceItems(ensureSelectedVisibility: true);
     });
   }
@@ -76,62 +79,67 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   void didUpdateWidget(ChipsChoice<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.singleValue != widget.singleValue ||
-        oldWidget.multiValue != widget.multiValue ||
-        oldWidget.singleOnChanged != widget.singleOnChanged ||
-        oldWidget.multiOnChanged != widget.multiOnChanged ||
-        !listEquals(oldWidget.choiceItems, widget.choiceItems) ||
-        oldWidget.choiceLoader != widget.choiceLoader ||
-        oldWidget.choiceStyle != widget.choiceStyle ||
-        oldWidget.choiceActiveStyle != widget.choiceActiveStyle) {
-      loadChoiceItems();
+    if (oldWidget.scrollController != widget.scrollController) {
+      initController();
     }
+
+    if (!listEquals(oldWidget.choiceItems, widget.choiceItems) ||
+        oldWidget.choiceLoader != widget.choiceLoader) {
+      loadChoiceItems(ensureSelectedVisibility: true);
+    }
+  }
+
+  void initSelectedKey() {
+    setState(() => selectedKey = isScrollable ? GlobalKey() : null);
+  }
+
+  void initController() {
+    setState(() => {
+          scrollController = isScrollable
+              ? (widget.scrollController ?? ScrollController())
+              : null
+        });
   }
 
   /// load the choice items
   void loadChoiceItems({ensureSelectedVisibility = false}) async {
     try {
-      setState(() {
-        error = null;
-        loading = true;
-      });
-      if (widget.choiceLoader != null) {
-        final List<C2Choice<T>> items = await widget.choiceLoader!();
-        setChoiceItems(items);
-      } else {
-        setChoiceItems(widget.choiceItems);
+      setState(() => choiceItems = widget.choiceItems);
+
+      // load async choice items
+      if (hasChoiceLoader) {
+        choiceItemsMemoizer = choiceItemsMemoizer ?? C2ChoiceMemoizer();
+        await loadAsyncChoiceItems();
       }
-    } catch (e) {
-      setState(() => error = e as Error?);
     } finally {
-      setState(() => loading = false);
       if (ensureSelectedVisibility == true) scrollToSelected();
     }
   }
 
-  void setChoiceItems(List<C2Choice<T>> _choiceItems) {
-    setState(() => choiceItems = _choiceItems
-        .map((e) => e.copyWith(
-              style:
-                  defaultChoiceStyle.merge(widget.choiceStyle).merge(e.style),
-              activeStyle: defaultActiveChoiceStyle
-                  .merge(widget.choiceStyle)
-                  .merge(e.style)
-                  .merge(widget.choiceActiveStyle)
-                  .merge(e.activeStyle),
-              selected: widget.isMultiChoice
-                  ? widget.multiValue?.contains(e.value)
-                  : widget.singleValue == e.value,
-              select: (selected) => select(e.value, selected: selected),
-            ))
-        .toList());
+  Future<void> loadAsyncChoiceItems() async {
+    if (hasChoiceLoaderRun) return;
+    try {
+      setState(() {
+        error = '';
+        loading = true;
+      });
+      final List<C2Choice<T>> items = await choiceItemsMemoizer!.runOnce(
+        () => widget.choiceLoader!(),
+      );
+      setState(() => choiceItems = items);
+    } catch (e) {
+      setState(() => error = e.toString());
+    } finally {
+      setState(() => loading = false);
+    }
   }
 
   /// Scroll to the selected choice item
   void scrollToSelected() {
-    if (isScrollable && selectedContext != null) {
-      scrollController.position
-          .ensureVisible(selectedContext!.findRenderObject()!);
+    final selectedContext = selectedKey?.currentContext;
+    final renderObject = selectedContext?.findRenderObject();
+    if (isScrollable && renderObject != null) {
+      scrollController?.position.ensureVisible(renderObject);
     }
   }
 
@@ -150,13 +158,13 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
             ? isScrollable
                 ? listScrollable
                 : listWrapped
-            : error != null
+            : error.isNotEmpty
                 ? widget.errorBuilder?.call(context) ??
                     C2Placeholder(
                       padding: padding,
                       style: widget.errorStyle,
                       align: widget.errorAlign,
-                      message: error.toString(),
+                      message: error,
                     )
                 : widget.placeholderBuilder?.call(context) ??
                     C2Placeholder(
@@ -170,6 +178,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   /// The scrollable choice items
   Widget get listScrollable {
     return SingleChildScrollView(
+      primary: false,
       padding: widget.padding ?? ChipsChoice.defaultScrollablePadding,
       scrollDirection: widget.direction,
       clipBehavior: widget.clipBehavior,
@@ -209,23 +218,43 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
   /// List of widget of the choice items
   List<Widget> get choiceChips {
-    return List<Widget>.generate(choiceItems.length, choiceChipsGenerator);
+    return List<Widget?>.generate(
+      choiceItems.length,
+      (i) => choiceChip(choiceItems[i]),
+      growable: false,
+    ).whereType<Widget>().toList();
   }
 
   /// Widget generator for choice items
-  Widget choiceChipsGenerator(int i) {
-    final C2Choice<T> item = choiceItems[i];
-    return item.hidden == true
-        ? Container()
+  Widget? choiceChip(C2Choice<T> data) {
+    final selected = isMultiChoice
+        ? widget.multiValue.contains(data.value)
+        : widget.singleValue == data.value;
+    data = data.copyWith(
+      style: defaultChoiceStyle.merge(widget.choiceStyle).merge(data.style),
+      activeStyle: defaultActiveChoiceStyle
+          .merge(widget.choiceStyle)
+          .merge(data.style)
+          .merge(widget.choiceActiveStyle)
+          .merge(data.activeStyle),
+      selected: selected,
+      select: (selected) => select(data.value, selected: selected),
+    );
+    final isTarget = isScrollable
+        ? isMultiChoice
+            ? selected && (widget.multiValue[0] == data.value)
+            : selected
+        : false;
+    return data.hidden == true
+        ? null
         : Builder(
+            key: isTarget ? selectedKey : ValueKey(data.value),
             builder: (context) {
-              setSelectedContext(context, item);
-              return widget.choiceBuilder?.call(item) ??
+              return widget.choiceBuilder?.call(data) ??
                   C2Chip(
-                    key: ValueKey('${item.value} - ${item.selected}'),
-                    data: item,
-                    label: widget.choiceLabelBuilder?.call(item),
-                    avatar: widget.choiceAvatarBuilder?.call(item),
+                    data: data,
+                    label: widget.choiceLabelBuilder?.call(data),
+                    avatar: widget.choiceAvatarBuilder?.call(data),
                   );
             },
           );
@@ -238,4 +267,4 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 /// We use this so that APIs that have become
 /// non-nullable can still be used with `!` and `?`
 /// to support older versions of the API as well.
-T? _ambiguate<T>(T? value) => value;
+// T? _ambiguate<T>(T? value) => value;

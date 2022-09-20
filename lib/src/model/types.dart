@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
 import 'choice_item.dart';
 
@@ -9,3 +10,6 @@ typedef Future<List<C2Choice<T>>> C2ChoiceLoader<T>();
 
 /// Builder for custom choice item
 typedef Widget? C2Builder<T>(C2Choice<T> item);
+
+/// alias to AsyncMemoizer
+class C2ChoiceMemoizer<T> extends AsyncMemoizer<List<C2Choice<T>>> {}

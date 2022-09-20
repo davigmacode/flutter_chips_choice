@@ -9,11 +9,6 @@ class C2SingleState<T> extends C2State<T> {
   C2Changed<T>? get onChanged => widget.singleOnChanged;
 
   @override
-  void setSelectedContext(BuildContext context, C2Choice<T> choice) {
-    if (choice.value == value) selectedContext = context;
-  }
-
-  @override
   void select(T val, {bool selected = true}) {
     onChanged?.call(val);
   }
@@ -22,7 +17,10 @@ class C2SingleState<T> extends C2State<T> {
   void didUpdateWidget(ChipsChoice<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // reset the initial value
-    if (oldWidget.singleValue != widget.singleValue) loadChoiceItems();
+    // scroll to selected
+    if (oldWidget.singleValue != widget.singleValue &&
+        widget.scrollToSelectedOnChanged) {
+      scrollToSelected();
+    }
   }
 }

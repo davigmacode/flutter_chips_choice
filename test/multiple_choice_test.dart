@@ -3,7 +3,7 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  List<String>? value;
+  List<String> value = [];
   List<String> options = [
     'News',
     'Entertainment',
@@ -19,7 +19,7 @@ void main() {
   ];
 
   setUp(() {
-    value = null;
+    value = [];
   });
 
   testWidgets(

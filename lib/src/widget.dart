@@ -123,13 +123,16 @@ class ChipsChoice<T> extends StatefulWidget {
   final C2Changed<T>? singleOnChanged;
 
   /// Initial value for multiple choice widget
-  final List<T>? multiValue;
+  final List<T> multiValue;
 
   /// Called when value changed in multiple choice widget
   final C2Changed<List<T>>? multiOnChanged;
 
   /// Used when the choice items is scrollable or [wrapped] is not [true]
   final ScrollController? scrollController;
+
+  /// scroll to selected value on external value changed
+  final bool scrollToSelectedOnChanged;
 
   /// Constructor for single choice
   ///
@@ -231,8 +234,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.alignment = WrapAlignment.start,
     this.runAlignment = WrapAlignment.start,
     this.wrapCrossAlignment = WrapCrossAlignment.start,
-    this.spacing = 10.0,
-    this.runSpacing = 0,
+    this.spacing = 10,
+    this.runSpacing = kIsWeb ? 7 : 0,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
@@ -242,6 +245,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerColor,
     this.spinnerThickness,
     this.scrollController,
+    this.scrollToSelectedOnChanged = false,
   })  : assert(
           choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',
@@ -249,7 +253,7 @@ class ChipsChoice<T> extends StatefulWidget {
         isMultiChoice = false,
         singleValue = value,
         singleOnChanged = onChanged,
-        multiValue = null,
+        multiValue = const [],
         multiOnChanged = null,
         super(key: key);
 
@@ -328,7 +332,7 @@ class ChipsChoice<T> extends StatefulWidget {
   /// The [scrollController] used when the choice items is scrollable or [wrapped] is not [true]
   ChipsChoice.multiple({
     Key? key,
-    required List<T>? value,
+    required List<T> value,
     required C2Changed<List<T>> onChanged,
     this.choiceItems = const [],
     this.choiceLoader,
@@ -353,8 +357,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.alignment = WrapAlignment.start,
     this.runAlignment = WrapAlignment.start,
     this.wrapCrossAlignment = WrapCrossAlignment.start,
-    this.spacing = 10.0,
-    this.runSpacing = 0,
+    this.spacing = 10,
+    this.runSpacing = kIsWeb ? 7 : 0,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
@@ -364,12 +368,13 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerColor,
     this.spinnerThickness,
     this.scrollController,
+    this.scrollToSelectedOnChanged = false,
   })  : assert(
           choiceItems.isNotEmpty || choiceLoader != null,
           'One of the parameters must be provided',
         ),
         isMultiChoice = true,
-        multiValue = value ?? [],
+        multiValue = value,
         multiOnChanged = onChanged,
         singleValue = null,
         singleOnChanged = null,

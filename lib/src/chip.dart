@@ -137,7 +137,7 @@ class C2Chip<T> extends StatelessWidget {
         : primaryColor.withOpacity(effectiveBorderOpacity);
 
     final OutlinedBorder? borderShape = createBorderShape(
-      color: effectiveBorderColor,
+      color: style?.borderColor ?? effectiveBorderColor,
       width: style?.borderWidth ?? (isOutlined ? 1 : 0),
       radius: style?.borderRadius,
       style: isOutlined ? BorderStyle.solid : style?.borderStyle,
