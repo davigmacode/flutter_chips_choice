@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   async:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: async
       url: "https://pub.dartlang.org"
@@ -35,7 +35,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.1.0-nullsafety.0"
+    version: "2.1.0-nullsafety.1"
   clock:
     dependency: transitive
     description:
@@ -183,7 +183,7 @@ packages:
       name: theme_patrol
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.1.0"
   typed_data:
     dependency: transitive
     description:

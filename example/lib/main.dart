@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:theme_patrol/theme_patrol.dart';
-import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 
 void main() => runApp(const MyApp());
@@ -25,14 +24,14 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           seedColor: Colors.red,
         ),
+        toggleableActiveColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      mode: ThemeMode.system,
       builder: (context, theme) {
         return MaterialApp(
-          title: 'Smart Select',
-          theme: theme.light,
-          darkTheme: theme.dark,
+          title: 'Chips Choice',
+          theme: theme.lightData,
+          darkTheme: theme.darkData,
           themeMode: theme.mode,
           home: const MyHomePage(),
         );
@@ -71,7 +70,7 @@ class MyHomePageState extends State<MyHomePage> {
   ];
 
   String? user;
-  final usersMemoizer = AsyncMemoizer<List<C2Choice<String>>>();
+  final usersMemoizer = C2ChoiceMemoizer<String>();
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -79,19 +78,23 @@ class MyHomePageState extends State<MyHomePage> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final formKey = GlobalKey<FormState>();
-  List<String>? formValue;
+  List<String> formValue = [];
 
   Future<List<C2Choice<String>>> getUsers() async {
-    String url =
-        "https://randomuser.me/api/?inc=gender,name,nat,picture,email&results=25";
-    Response res = await Dio().get(url);
-    return C2Choice.listFrom<String, dynamic>(
-      source: res.data['results'],
-      value: (index, item) => item['email'],
-      label: (index, item) =>
-          item['name']['first'] + ' ' + item['name']['last'],
-      meta: (index, item) => item,
-    )..insert(0, const C2Choice<String>(value: 'all', label: 'All'));
+    try {
+      String url =
+          "https://randomuser.me/api/?inc=gender,name,nat,picture,email&results=25";
+      Response res = await Dio().get(url);
+      return C2Choice.listFrom<String, dynamic>(
+        source: res.data['results'],
+        value: (index, item) => item['email'],
+        label: (index, item) =>
+            item['name']['first'] + ' ' + item['name']['last'],
+        meta: (index, item) => item,
+      )..insert(0, const C2Choice<String>(value: 'all', label: 'All'));
+    } on DioError catch (e) {
+      throw ErrorDescription(e.message);
+    }
   }
 
   @override
@@ -100,17 +103,12 @@ class MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Flutter ChipsChoice'),
         actions: <Widget>[
-          Switch(
-            // This bool value toggles the switch.
-            value: ThemePatrol.of(context).isDarkMode,
-            onChanged: (bool value) {
-              if (value) {
-                ThemePatrol.of(context).setDarkMode();
-              } else {
-                ThemePatrol.of(context).setLightMode();
-              }
-            },
-          ),
+          ThemeConsumer(builder: ((context, theme) {
+            return IconButton(
+              onPressed: () => theme.toggleMode(),
+              icon: Icon(theme.modeIcon),
+            );
+          })),
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: () => _about(context),
@@ -142,6 +140,10 @@ class MyHomePageState extends State<MyHomePage> {
                       choiceActiveStyle: C2ChoiceStyle(
                         appearance: C2ChipType.elevated,
                         color: Theme.of(context).colorScheme.primary,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        showCheckmark: true,
                       ),
                     ),
                   ),
@@ -196,6 +198,8 @@ class MyHomePageState extends State<MyHomePage> {
                       ),
                       wrapped: true,
                       textDirection: TextDirection.rtl,
+                      choiceActiveStyle:
+                          const C2ChoiceStyle(showCheckmark: true),
                     ),
                   ),
                   Content(
@@ -394,7 +398,8 @@ class MyHomePageState extends State<MyHomePage> {
                           FormField<List<String>>(
                             autovalidateMode: AutovalidateMode.always,
                             initialValue: formValue,
-                            onSaved: (val) => setState(() => formValue = val),
+                            onSaved: (val) =>
+                                setState(() => formValue = val ?? []),
                             validator: (value) {
                               if (value?.isEmpty ?? value == null) {
                                 return 'Please select some categories';
@@ -410,7 +415,7 @@ class MyHomePageState extends State<MyHomePage> {
                                   Container(
                                     alignment: Alignment.centerLeft,
                                     child: ChipsChoice<String>.multiple(
-                                      value: state.value,
+                                      value: state.value ?? [],
                                       onChanged: (val) => state.didChange(val),
                                       choiceItems:
                                           C2Choice.listFrom<String, String>(
@@ -424,9 +429,9 @@ class MyHomePageState extends State<MyHomePage> {
                                         borderOpacity: .3,
                                       ),
                                       choiceActiveStyle: const C2ChoiceStyle(
-                                        color: Colors.indigo,
-                                        brightness: Brightness.dark,
-                                      ),
+                                          color: Colors.indigo,
+                                          brightness: Brightness.dark,
+                                          appearance: C2ChipType.elevated),
                                       wrapped: true,
                                     ),
                                   ),

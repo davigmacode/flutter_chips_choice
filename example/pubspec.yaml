@@ -31,9 +31,8 @@ dependencies:
     sdk: flutter
   chips_choice:
     path: ../
-  theme_patrol: ^1.0.1
+  theme_patrol: ^2.1.0
   dio: ^4.0.0
-  async: ^2.8.2
 
 
   # The following adds the Cupertino Icons font to your application.
