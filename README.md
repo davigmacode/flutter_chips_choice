@@ -27,11 +27,9 @@ Lite version of [smart_select](https://pub.dev/packages/smart_select) package, z
 
 ### Preview
 
-![Demo Preview](https://github.com/davigmacode/flutter_chips_choice/raw/master/demo/screens/screencast.gif)
+[![Demo Preview](https://github.com/davigmacode/flutter_chips_choice/raw/master/demo/screens/screencast.gif)](https://davigmacode.github.io/flutter_chips_choice)
 
-### Download
-
-[![Demo App](https://github.com/davigmacode/flutter_chips_choice/raw/master/demo/build/qr-apk.png "ChipsChoice Demo App")](https://github.com/davigmacode/flutter_chips_choice/raw/master/demo/build/ChipsChoice.apk)
+[Demo](https://davigmacode.github.io/flutter_chips_choice)
 
 
 ## Features
