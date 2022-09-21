@@ -13,12 +13,18 @@ class C2Chip<T> extends StatelessWidget {
   /// Avatar widget
   final Widget? avatar;
 
+  final ThemeData appTheme;
+
+  final ChipThemeData chipTheme;
+
   /// Default constructor
   const C2Chip({
     Key? key,
     required this.data,
     this.label,
     this.avatar,
+    required this.appTheme,
+    required this.chipTheme,
   }) : super(key: key);
 
   static EdgeInsetsGeometry defaultPadding = EdgeInsets.all(4.0);
@@ -76,9 +82,6 @@ class C2Chip<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData appTheme = Theme.of(context);
-    final ChipThemeData chipTheme = ChipTheme.of(context);
-
     final C2ChoiceStyle? style = data.effectiveStyle;
 
     final Brightness? brightness = style?.brightness ?? chipTheme.brightness;
@@ -156,7 +159,6 @@ class C2Chip<T> extends StatelessWidget {
           shape: style?.borderShape ?? borderShape,
           clipBehavior: style?.clipBehavior ?? Clip.none,
           materialTapTargetSize: style?.materialTapTargetSize,
-          tooltip: data.tooltip,
           label: label ?? Text(data.label),
           labelStyle: primaryLabelStyle,
           labelPadding: style?.labelPadding,

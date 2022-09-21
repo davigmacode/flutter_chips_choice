@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           seedColor: Colors.red,
         ),
+        materialTapTargetSize: MaterialTapTargetSize.padded,
       ),
       dark: ThemeData(
         brightness: Brightness.dark,
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ),
         toggleableActiveColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        materialTapTargetSize: MaterialTapTargetSize.padded,
       ),
       builder: (context, theme) {
         return MaterialApp(

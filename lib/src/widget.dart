@@ -6,10 +6,10 @@ import 'model/choice_item.dart';
 import 'model/types.dart';
 import 'chip.dart';
 
-part 'widget_state.dart';
-part 'widget_single.dart';
-part 'widget_multi.dart';
-part 'widget_utils.dart';
+part 'state.dart';
+part 'state_single.dart';
+part 'state_multi.dart';
+part 'utils.dart';
 
 /// Easy way to provide a single or multiple choice chips
 class ChipsChoice<T> extends StatefulWidget {
@@ -235,7 +235,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.runAlignment = WrapAlignment.start,
     this.wrapCrossAlignment = WrapCrossAlignment.start,
     this.spacing = 10,
-    this.runSpacing = kIsWeb ? 7 : 0,
+    this.runSpacing = 0,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
@@ -358,7 +358,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.runAlignment = WrapAlignment.start,
     this.wrapCrossAlignment = WrapCrossAlignment.start,
     this.spacing = 10,
-    this.runSpacing = kIsWeb ? 7 : 0,
+    this.runSpacing = 0,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
