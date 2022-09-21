@@ -4,24 +4,20 @@
 
 Lite version of [smart_select](https://pub.dev/packages/smart_select) package, zero dependencies, an easy way to provide a single or multiple choice chips.
 
-## What's New in Version 2.x.x
+## What's New in Version 2.1.x
 
-- Added parameter `ChipsChoice.choiceloader` to easily load async choice items
-- Easily configure unselected and selected choice style using `ChipsChoice.choiceStyle` and `ChipsChoice.choiceActiveStyle`
-- Individual choice style using `C2Choice.style` and `C2Choice.activeStyle`
-- Added scroll and text direction configuration
-- Added more custom builder
-- And many more configurations that can be seen in the [API Reference](https://pub.dev/documentation/chips_choice/latest/) and [example](https://pub.dev/packages/chips_choice#-example-tab-)
-
-## Migration from 1.4.1 to 2.0.0
-
-- The `options` parameter is changed to `choiceItems`
-- The `ChipsChoiceOption` class is changed to `C2Choice`,
-- Removed the `avatar` parameter from choice item class, instead use `ChipsChoice.choiceAvatarBuilder`
-- The `ChipsChoice.isWrapped` parameter is changed to `ChipsChoice.wrapped`
-- The `ChipsChoice.itemBuilder` parameter is changed to `ChipsChoice.choiceBuilder`
-- The `ChipsChoice.wrapAlignment` parameter is changed to `ChipsChoice.alignment`
-- The `ChipsChoice.itemConfig` parameter and `ChipsChoiceItemConfig` class is removed, instead use `C2ChoiceStyle` class with `ChipsChoice.choiceStyle` and `ChipsChoice.choiceActiveStyle`
+* Improve performance
+* Support sound null safety
+* Improve async choices loader with asyncMemoizer
+* Provide `C2ChoiceMemoizer<T>` which is an alias to `AsyncMemoizer<List<C2Choice<T>>>`
+* The chip widget respective to app theme
+* Introduce chip appearance (elevated, outlined, flatten)
+* Value of multiple choice cannot be null
+* Fixed issue #37
+* Fixed issue #34
+* Fixed wrapped chips run spacing on web
+* Fixed chip run spacing
+* Fixed tooltip error
 
 ## Demo
 
