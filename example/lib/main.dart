@@ -302,7 +302,7 @@ class MyHomePageState extends State<MyHomePage> {
                         borderColor: Colors.blueGrey.withOpacity(.5),
                       ),
                       choiceActiveStyle: const C2ChoiceStyle(
-                        brightness: Brightness.dark,
+                        appearance: C2ChipType.elevated,
                         borderShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             side: BorderSide(color: Colors.red)),
@@ -336,13 +336,13 @@ class MyHomePageState extends State<MyHomePage> {
                               choiceItems: snapshot.data ?? [],
                               choiceStyle: const C2ChoiceStyle(
                                 color: Colors.blueGrey,
-                                brightness: Brightness.dark,
+                                appearance: C2ChipType.elevated,
                                 margin: EdgeInsets.all(5),
                                 showCheckmark: false,
                               ),
                               choiceActiveStyle: const C2ChoiceStyle(
                                 color: Colors.green,
-                                brightness: Brightness.dark,
+                                appearance: C2ChipType.elevated,
                               ),
                               choiceAvatarBuilder: (data) {
                                 if (data.meta == null) return null;
@@ -373,13 +373,13 @@ class MyHomePageState extends State<MyHomePage> {
                       choiceLoader: getUsers,
                       choiceStyle: const C2ChoiceStyle(
                         color: Colors.blueGrey,
-                        brightness: Brightness.dark,
+                        appearance: C2ChipType.elevated,
                         margin: EdgeInsets.all(5),
                         showCheckmark: false,
                       ),
                       choiceActiveStyle: const C2ChoiceStyle(
                         color: Colors.green,
-                        brightness: Brightness.dark,
+                        appearance: C2ChipType.elevated,
                       ),
                       choiceAvatarBuilder: (data) {
                         if (data.meta == null) return null;
@@ -429,11 +429,12 @@ class MyHomePageState extends State<MyHomePage> {
                                       choiceStyle: const C2ChoiceStyle(
                                         color: Colors.indigo,
                                         borderOpacity: .3,
+                                        appearance: C2ChipType.outlined,
                                       ),
                                       choiceActiveStyle: const C2ChoiceStyle(
-                                          color: Colors.indigo,
-                                          brightness: Brightness.dark,
-                                          appearance: C2ChipType.elevated),
+                                        color: Colors.indigo,
+                                        appearance: C2ChipType.elevated,
+                                      ),
                                       wrapped: true,
                                     ),
                                   ),

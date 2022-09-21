@@ -1,3 +1,9 @@
+## 2.1.0
+
+* Improve performance
+* Fixed chip run spacing
+* Fixed tooltip error
+
 ## 2.1.0-nullsafety.1
 
 * Improve performance

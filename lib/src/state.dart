@@ -236,7 +236,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
     final selected = isMultiChoice
         ? widget.multiValue.contains(data.value)
         : widget.singleValue == data.value;
-    data = data.copyWith(
+    final item = data.copyWith(
       style: defaultChoiceStyle.merge(widget.choiceStyle).merge(data.style),
       activeStyle: defaultActiveChoiceStyle
           .merge(widget.choiceStyle)
@@ -246,28 +246,28 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
       selected: selected,
       select: (selected) => select(data.value, selected: selected),
     );
-    final isTarget = isScrollable
+    final isSelectedTarget = isScrollable
         ? isMultiChoice
-            ? selected && (widget.multiValue[0] == data.value)
+            ? selected && (widget.multiValue[0] == item.value)
             : selected
         : false;
-    return data.hidden == true
+    return item.hidden == true
         ? null
         : Builder(
-            key: isTarget ? selectedKey : ValueKey(data.value),
+            key: isSelectedTarget ? selectedKey : ValueKey(item.value),
             builder: (context) {
-              final chip = widget.choiceBuilder?.call(data) ??
+              final chip = widget.choiceBuilder?.call(item) ??
                   C2Chip(
-                    data: data,
-                    label: widget.choiceLabelBuilder?.call(data),
-                    avatar: widget.choiceAvatarBuilder?.call(data),
+                    data: item,
+                    label: widget.choiceLabelBuilder?.call(item),
+                    avatar: widget.choiceAvatarBuilder?.call(item),
                     appTheme: appTheme,
                     chipTheme: chipTheme,
                   );
 
-              if (data.tooltip != null) {
+              if (item.tooltip != null) {
                 return Tooltip(
-                  message: data.tooltip,
+                  message: item.tooltip,
                   child: chip,
                 );
               }
