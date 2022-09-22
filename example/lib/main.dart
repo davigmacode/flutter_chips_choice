@@ -168,7 +168,7 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                   Content(
                     title:
-                        'Wrapped List Single Choice and Custom Border Radius',
+                        'Wrapped List Single Choice, Custom Border Radius, Leading and Trailing Widget',
                     child: ChipsChoice<int>.single(
                       value: tag,
                       onChanged: (val) => setState(() => tag = val),
@@ -182,6 +182,16 @@ class MyHomePageState extends State<MyHomePage> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(5),
                         ),
+                      ),
+                      leading: IconButton(
+                        icon: const Icon(Icons.add_box_rounded),
+                        onPressed: () => setState(() => options.add(
+                              'Opt #${options.length + 1}',
+                            )),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.remove_circle),
+                        onPressed: () => setState(() => options.removeLast()),
                       ),
                       wrapped: true,
                     ),
@@ -205,7 +215,7 @@ class MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   Content(
-                    title: 'Disabled Choice Item',
+                    title: 'Disabled and Hidden Choice Item',
                     child: ChipsChoice<int>.single(
                       value: tag,
                       onChanged: (val) => setState(() => tag = val),
@@ -215,22 +225,7 @@ class MyHomePageState extends State<MyHomePage> {
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
                         disabled: (i, v) => [0, 2, 5].contains(i),
-                      ),
-                      wrapped: true,
-                    ),
-                  ),
-                  Content(
-                    title: 'Hidden Choice Item',
-                    child: ChipsChoice<String>.multiple(
-                      value: tags,
-                      onChanged: (val) => setState(() => tags = val),
-                      choiceItems: C2Choice.listFrom<String, String>(
-                        source: options,
-                        value: (i, v) => v,
-                        label: (i, v) => v,
-                        tooltip: (i, v) => v,
-                        hidden: (i, v) =>
-                            ['Science', 'Politics', 'News', 'Tech'].contains(v),
+                        hidden: (i, v) => i > 9,
                       ),
                       wrapped: true,
                     ),
@@ -266,20 +261,6 @@ class MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                       wrapped: true,
-                    ),
-                  ),
-                  Content(
-                    title: 'Append an Item to Options',
-                    child: ChipsChoice<int>.single(
-                      value: tag,
-                      onChanged: (val) => setState(() => tag = val),
-                      choiceItems: C2Choice.listFrom<int, String>(
-                        source: options,
-                        value: (i, v) => i,
-                        label: (i, v) => v,
-                        tooltip: (i, v) => v,
-                      )..insert(
-                          0, const C2Choice<int>(value: -1, label: 'All')),
                     ),
                   ),
                   Content(

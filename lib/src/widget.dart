@@ -111,6 +111,12 @@ class ChipsChoice<T> extends StatefulWidget {
   /// Thickness of the default spinner widget
   final double? spinnerThickness;
 
+  /// Custom widget that inserted before the first choice item
+  final Widget? leading;
+
+  /// Custom widget that inserted after the last choice item
+  final Widget? trailing;
+
   /// Whether show the choice items
   /// as single choice or multiple choice
   final bool isMultiChoice;
@@ -205,6 +211,10 @@ class ChipsChoice<T> extends StatefulWidget {
   ///
   /// The [spinnerThickness] is thickness of the default spinner widget
   ///
+  /// The [leading] is custom widget that inserted before the first choice item
+  ///
+  /// The [trailing] is custom widget that inserted after the last choice item
+  ///
   /// The [scrollController] used when the choice items is scrollable or [wrapped] is not [true]
   ChipsChoice.single({
     Key? key,
@@ -243,6 +253,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerSize,
     this.spinnerColor,
     this.spinnerThickness,
+    this.leading,
+    this.trailing,
     this.scrollController,
     this.scrollToSelectedOnChanged = false,
   })  : assert(
@@ -328,6 +340,10 @@ class ChipsChoice<T> extends StatefulWidget {
   ///
   /// The [spinnerThickness] is thickness of the default spinner widget
   ///
+  /// The [leading] is custom widget that inserted before the first choice item
+  ///
+  /// The [trailing] is custom widget that inserted after the last choice item
+  ///
   /// The [scrollController] used when the choice items is scrollable or [wrapped] is not [true]
   ChipsChoice.multiple({
     Key? key,
@@ -366,6 +382,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.spinnerSize,
     this.spinnerColor,
     this.spinnerThickness,
+    this.leading,
+    this.trailing,
     this.scrollController,
     this.scrollToSelectedOnChanged = false,
   })  : assert(

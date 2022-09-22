@@ -85,7 +85,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
     if (!listEquals(oldWidget.choiceItems, widget.choiceItems) ||
         oldWidget.choiceLoader != widget.choiceLoader) {
-      loadChoiceItems(ensureSelectedVisibility: true);
+      loadChoiceItems();
     }
   }
 
@@ -220,11 +220,16 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   List<Widget> get choiceChips {
     final ThemeData appTheme = Theme.of(context);
     final ChipThemeData chipTheme = ChipTheme.of(context);
-    return List<Widget?>.generate(
+    final choiceWidgets = List<Widget?>.generate(
       choiceItems.length,
       (i) => choiceChip(i, appTheme, chipTheme),
       growable: false,
-    ).whereType<Widget>().toList();
+    );
+    return <Widget?>[
+      widget.leading,
+      ...choiceWidgets,
+      widget.trailing,
+    ].whereType<Widget>().toList();
   }
 
   /// Widget generator for choice items
