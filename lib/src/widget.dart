@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'model/choice_style.dart';
-import 'model/choice_item.dart';
-import 'model/types.dart';
+import 'choice_style.dart';
+import 'choice_item.dart';
+import 'types.dart';
 import 'chip.dart';
 
 part 'state.dart';

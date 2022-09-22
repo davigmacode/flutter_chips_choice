@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'model/choice_item.dart';
-import 'model/choice_style.dart';
+import 'choice_item.dart';
+import 'choice_style.dart';
 
 /// Default choice item widget
 class C2Chip<T> extends StatelessWidget {
