@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Hotfix static analysis error
+
 ## 2.1.0
 
 * Improve performance

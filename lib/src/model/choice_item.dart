@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'choice_style.dart';
 
 /// Choice item
@@ -68,7 +67,7 @@ class C2Choice<T> {
           selected == other.selected;
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
         value,
         label,
         tooltip,

@@ -1,4 +1,3 @@
-import 'package:chips_choice/src/model/choice_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'model/choice_style.dart';
