@@ -9,7 +9,7 @@ typedef C2Changed<T> = void Function(T value);
 typedef C2ChoiceLoader<T> = Future<List<C2Choice<T>>> Function();
 
 /// Builder for custom choice item
-typedef C2Builder<T> = Widget? Function(C2Choice<T> item);
+typedef C2Builder<T> = Widget? Function(C2Choice<T> item, int i);
 
 /// alias to AsyncMemoizer
 class C2ChoiceMemoizer<T> extends AsyncMemoizer<List<C2Choice<T>>> {}

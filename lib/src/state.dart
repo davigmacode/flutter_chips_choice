@@ -222,17 +222,18 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
     final ChipThemeData chipTheme = ChipTheme.of(context);
     return List<Widget?>.generate(
       choiceItems.length,
-      (i) => choiceChip(choiceItems[i], appTheme, chipTheme),
+      (i) => choiceChip(i, appTheme, chipTheme),
       growable: false,
     ).whereType<Widget>().toList();
   }
 
   /// Widget generator for choice items
   Widget? choiceChip(
-    C2Choice<T> data,
+    int i,
     ThemeData appTheme,
     ChipThemeData chipTheme,
   ) {
+    final data = choiceItems[i];
     final selected = isMultiChoice
         ? widget.multiValue.contains(data.value)
         : widget.singleValue == data.value;
@@ -256,11 +257,11 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
         : Builder(
             key: isSelectedTarget ? selectedKey : ValueKey(item.value),
             builder: (context) {
-              final chip = widget.choiceBuilder?.call(item) ??
+              final chip = widget.choiceBuilder?.call(item, i) ??
                   C2Chip(
                     data: item,
-                    label: widget.choiceLabelBuilder?.call(item),
-                    avatar: widget.choiceAvatarBuilder?.call(item),
+                    label: widget.choiceLabelBuilder?.call(item, i),
+                    avatar: widget.choiceAvatarBuilder?.call(item, i),
                     appTheme: appTheme,
                     chipTheme: chipTheme,
                   );

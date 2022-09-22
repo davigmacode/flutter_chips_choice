@@ -344,7 +344,7 @@ class MyHomePageState extends State<MyHomePage> {
                                 color: Colors.green,
                                 appearance: C2ChipType.elevated,
                               ),
-                              choiceAvatarBuilder: (data) {
+                              choiceAvatarBuilder: (data, i) {
                                 if (data.meta == null) return null;
                                 return CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -381,7 +381,7 @@ class MyHomePageState extends State<MyHomePage> {
                         color: Colors.green,
                         appearance: C2ChipType.elevated,
                       ),
-                      choiceAvatarBuilder: (data) {
+                      choiceAvatarBuilder: (data, i) {
                         if (data.meta == null) return null;
                         return CircleAvatar(
                           backgroundImage: NetworkImage(
@@ -502,7 +502,7 @@ class MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => v,
                         label: (i, v) => v,
                       ),
-                      choiceBuilder: (item) {
+                      choiceBuilder: (item, i) {
                         return CustomChip(
                           label: item.label,
                           width: 70,
@@ -529,7 +529,7 @@ class MyHomePageState extends State<MyHomePage> {
                     label: (i, v) => v,
                   ),
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  choiceBuilder: (item) {
+                  choiceBuilder: (item, i) {
                     return CustomChip(
                       label: item.label,
                       width: double.infinity,
