@@ -184,12 +184,14 @@ class MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       leading: IconButton(
+                        tooltip: 'Add Choice',
                         icon: const Icon(Icons.add_box_rounded),
                         onPressed: () => setState(() => options.add(
                               'Opt #${options.length + 1}',
                             )),
                       ),
                       trailing: IconButton(
+                        tooltip: 'Remove Choice',
                         icon: const Icon(Icons.remove_circle),
                         onPressed: () => setState(() => options.removeLast()),
                       ),
@@ -285,8 +287,9 @@ class MyHomePageState extends State<MyHomePage> {
                       choiceActiveStyle: const C2ChoiceStyle(
                         appearance: C2ChipType.elevated,
                         borderShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            side: BorderSide(color: Colors.red)),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          side: BorderSide(color: Colors.red),
+                        ),
                       ),
                     ),
                   ),
