@@ -139,10 +139,9 @@ class MyHomePageState extends State<MyHomePage> {
                       // choiceStyle: const C2ChoiceStyle(
                       //   appearance: C2ChipType.elevated,
                       // ),
-                      choiceActiveStyle: C2ChoiceStyle(
-                        appearance: C2ChipType.elevated,
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.all(
+                      choiceActiveStyle: const C2ChoiceStyle.elevated(
+                        // color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.all(
                           Radius.circular(5),
                         ),
                         showCheckmark: true,
@@ -160,8 +159,7 @@ class MyHomePageState extends State<MyHomePage> {
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
                       ),
-                      choiceStyle: const C2ChoiceStyle(
-                        appearance: C2ChipType.outlined,
+                      choiceStyle: const C2ChoiceStyle.outlined(
                         showCheckmark: true,
                       ),
                     ),
@@ -186,9 +184,9 @@ class MyHomePageState extends State<MyHomePage> {
                       leading: IconButton(
                         tooltip: 'Add Choice',
                         icon: const Icon(Icons.add_box_rounded),
-                        onPressed: () => setState(() => options.add(
-                              'Opt #${options.length + 1}',
-                            )),
+                        onPressed: () => setState(
+                          () => options.add('Opt #${options.length + 1}'),
+                        ),
                       ),
                       trailing: IconButton(
                         tooltip: 'Remove Choice',
@@ -212,8 +210,9 @@ class MyHomePageState extends State<MyHomePage> {
                       ),
                       wrapped: true,
                       textDirection: TextDirection.rtl,
-                      choiceActiveStyle:
-                          const C2ChoiceStyle(showCheckmark: true),
+                      choiceActiveStyle: const C2ChoiceStyle(
+                        showCheckmark: true,
+                      ),
                     ),
                   ),
                   Content(
@@ -246,8 +245,9 @@ class MyHomePageState extends State<MyHomePage> {
                           if (['Science', 'Politics', 'News', 'Tech']
                               .contains(v)) {
                             return const C2ChoiceStyle(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
                               showCheckmark: false,
                             );
                           }
@@ -256,8 +256,7 @@ class MyHomePageState extends State<MyHomePage> {
                         activeStyle: (i, v) {
                           if (['Science', 'Politics', 'News', 'Tech']
                               .contains(v)) {
-                            return const C2ChoiceStyle(
-                                brightness: Brightness.dark);
+                            return const C2ChoiceStyle.elevated();
                           }
                           return null;
                         },
@@ -284,13 +283,13 @@ class MyHomePageState extends State<MyHomePage> {
                             const BorderRadius.all(Radius.circular(5)),
                         borderColor: Colors.blueGrey.withOpacity(.5),
                       ),
-                      choiceActiveStyle: const C2ChoiceStyle(
-                        appearance: C2ChipType.elevated,
-                        borderShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          side: BorderSide(color: Colors.red),
-                        ),
-                      ),
+                      choiceActiveStyle: const C2ChoiceStyle.elevated(
+                          // appearance: C2ChipType.elevated,
+                          // borderShape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                          //   side: BorderSide(color: Colors.red),
+                          // ),
+                          ),
                     ),
                   ),
                   Content(
@@ -305,11 +304,12 @@ class MyHomePageState extends State<MyHomePage> {
                             padding: EdgeInsets.all(20),
                             child: Center(
                               child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  )),
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
                             ),
                           );
                         } else {
@@ -318,15 +318,15 @@ class MyHomePageState extends State<MyHomePage> {
                               value: user,
                               onChanged: (val) => setState(() => user = val),
                               choiceItems: snapshot.data ?? [],
-                              choiceStyle: const C2ChoiceStyle(
+                              choiceStyle: const C2ChoiceStyle.elevated(
                                 color: Colors.blueGrey,
-                                appearance: C2ChipType.elevated,
+                                // appearance: C2ChipType.elevated,
                                 margin: EdgeInsets.all(5),
                                 showCheckmark: false,
                               ),
-                              choiceActiveStyle: const C2ChoiceStyle(
+                              choiceActiveStyle: const C2ChoiceStyle.elevated(
                                 color: Colors.green,
-                                appearance: C2ChipType.elevated,
+                                // appearance: C2ChipType.elevated,
                               ),
                               choiceAvatarBuilder: (data, i) {
                                 if (data.meta == null) return null;
@@ -355,15 +355,15 @@ class MyHomePageState extends State<MyHomePage> {
                       value: user,
                       onChanged: (val) => setState(() => user = val),
                       choiceLoader: getUsers,
-                      choiceStyle: const C2ChoiceStyle(
+                      choiceStyle: const C2ChoiceStyle.elevated(
                         color: Colors.blueGrey,
-                        appearance: C2ChipType.elevated,
+                        // appearance: C2ChipType.elevated,
                         margin: EdgeInsets.all(5),
                         showCheckmark: false,
                       ),
-                      choiceActiveStyle: const C2ChoiceStyle(
+                      choiceActiveStyle: const C2ChoiceStyle.elevated(
                         color: Colors.green,
-                        appearance: C2ChipType.elevated,
+                        // appearance: C2ChipType.elevated,
                       ),
                       choiceAvatarBuilder: (data, i) {
                         if (data.meta == null) return null;
@@ -410,14 +410,15 @@ class MyHomePageState extends State<MyHomePage> {
                                         label: (i, v) => v,
                                         tooltip: (i, v) => v,
                                       ),
-                                      choiceStyle: const C2ChoiceStyle(
+                                      choiceStyle: const C2ChoiceStyle.outlined(
                                         color: Colors.indigo,
                                         borderOpacity: .3,
-                                        appearance: C2ChipType.outlined,
+                                        // appearance: C2ChipType.outlined,
                                       ),
-                                      choiceActiveStyle: const C2ChoiceStyle(
+                                      choiceActiveStyle:
+                                          const C2ChoiceStyle.elevated(
                                         color: Colors.indigo,
-                                        appearance: C2ChipType.elevated,
+                                        // appearance: C2ChipType.elevated,
                                       ),
                                       wrapped: true,
                                     ),
@@ -562,6 +563,7 @@ class CustomChip extends StatelessWidget {
       height: height,
       margin: margin ?? const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
       duration: const Duration(milliseconds: 300),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: selected ? (color ?? Colors.green) : Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(selected ? 25 : 10)),
@@ -571,6 +573,7 @@ class CustomChip extends StatelessWidget {
         ),
       ),
       child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(selected ? 25 : 10)),
         onTap: () => onSelect(!selected),
         child: Stack(
           alignment: Alignment.center,

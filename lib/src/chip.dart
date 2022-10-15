@@ -30,6 +30,9 @@ class C2Chip<T> extends StatelessWidget {
   static EdgeInsetsGeometry defaultPadding = EdgeInsets.all(4.0);
   static EdgeInsetsGeometry defaultMargin = EdgeInsets.all(0);
 
+  /// Default border opacity
+  static final double defaultBorderOpacity = .2;
+
   // These are Material Design defaults, and are used to derive
   // component Colors (with opacity) from base colors.
   static double backgroundAlpha = .12; // 10%
@@ -77,113 +80,128 @@ class C2Chip<T> extends StatelessWidget {
           );
   }
 
-  /// Default border opacity
-  static final double defaultBorderOpacity = .2;
-
   @override
   Widget build(BuildContext context) {
     final C2ChoiceStyle? style = data.effectiveStyle;
 
-    final Brightness? brightness = style?.brightness ?? chipTheme.brightness;
-
-    // final bool isDark = brightness == Brightness.dark;
-
+    final bool isFlatten = style?.isFlatten ?? false;
     final bool isElevated = style?.isElevated ?? false;
-
     final bool isOutlined = style?.isOutlined ?? false;
 
-    final Color primaryColor = style?.color ??
-        chipTheme.backgroundColor ??
-        appTheme.unselectedWidgetColor;
+    // final Color primaryColor = style?.color ??
+    //     chipTheme.backgroundColor ??
+    //     appTheme.unselectedWidgetColor;
+
+    final unselectedColor =
+        chipTheme.backgroundColor ?? appTheme.unselectedWidgetColor;
+    final selectedColor = appTheme.colorScheme.primary;
+    final effectiveColor = data.selected ? selectedColor : unselectedColor;
+
+    // final Color primaryColor =
+    //     chipTheme.backgroundColor ??
+    //     appTheme.unselectedWidgetColor;
 
     final double backgroundOpacity =
-        style?.effectiveBackgroundOpacity ?? backgroundAlpha;
+        style?.backgroundOpacity ?? backgroundAlpha;
 
-    final Color backgroundColor = isElevated
-        ? primaryColor
-        : isOutlined
-            ? Colors.transparent
-            : primaryColor.withOpacity(backgroundOpacity);
+    // final Color backgroundColor = isElevated
+    //     ? primaryColor
+    //     : isOutlined
+    //         ? Colors.transparent
+    //         : primaryColor.withOpacity(backgroundOpacity);
+    final Color backgroundColor =
+        data.style?.backgroundColor ?? unselectedColor;
+    final Color selectedBackgroundColor =
+        data.activeStyle?.backgroundColor ?? selectedColor;
 
-    final Color disabledColor = primaryColor.withAlpha(disabledAlpha);
+    final Color disabledColor =
+        style?.disabledColor ?? unselectedColor.withAlpha(disabledAlpha);
 
-    final Color secondaryColor = style?.color ?? appTheme.colorScheme.primary;
+    // final Color secondaryColor = style?.color ?? appTheme.colorScheme.primary;
+    // final Color secondaryColor = appTheme.colorScheme.primary;
 
-    final Color selectedColor = isElevated
-        ? secondaryColor
-        : isOutlined
-            ? Colors.transparent
-            : secondaryColor.withOpacity(backgroundOpacity);
+    // final Color selectedColor = isElevated
+    //     ? secondaryColor
+    //     : isOutlined
+    //         ? Colors.transparent
+    //         : secondaryColor.withOpacity(backgroundOpacity);
+    // final Color selectedColor = isElevated
+    //     ? secondaryColor
+    //     : isOutlined
+    //         ? Colors.transparent
+    //         : secondaryColor.withOpacity(backgroundOpacity);
 
-    final Color foregroundColor = isElevated
-        ? Colors.white
-        : data.selected
-            ? secondaryColor.withAlpha(foregroundAlpha)
-            : primaryColor.withAlpha(foregroundAlpha);
+    // final Color foregroundColor = isElevated
+    //     ? Colors.white
+    //     : data.selected
+    //         ? secondaryColor.withAlpha(foregroundAlpha)
+    //         : primaryColor.withAlpha(foregroundAlpha);
+    final foregroundColor = style?.foregroundColor ?? effectiveColor;
 
-    final TextStyle defaultLabelStyle =
+    final defaultLabelStyle =
         TextStyle().merge(chipTheme.labelStyle).merge(style?.labelStyle);
 
-    final TextStyle primaryLabelStyle =
+    final primaryLabelStyle =
         defaultLabelStyle.copyWith(color: foregroundColor);
 
-    final TextStyle selectedLabelStyle = defaultLabelStyle.copyWith(
-      color:
-          isElevated ? Colors.white : secondaryColor.withAlpha(foregroundAlpha),
-    );
+    // final TextStyle selectedLabelStyle = defaultLabelStyle.copyWith(
+    //   color:
+    //       isElevated ? Colors.white : secondaryColor.withAlpha(foregroundAlpha),
+    // );
 
-    final double effectiveBorderOpacity =
-        style?.effectiveBorderOpacity ?? borderAlpha;
+    // final TextStyle labelStyle = data.selected ? selectedLabelStyle : primaryLabelStyle;
 
-    final Color effectiveBorderColor = data.selected
-        ? secondaryColor.withOpacity(effectiveBorderOpacity)
-        : primaryColor.withOpacity(effectiveBorderOpacity);
+    final labelStyle = TextStyle()
+        .merge(chipTheme.labelStyle)
+        .merge(style?.labelStyle)
+        .copyWith(color: foregroundColor);
 
-    final OutlinedBorder? borderShape = createBorderShape(
+    final effectiveBorderOpacity = style?.borderOpacity ?? borderAlpha;
+    final effectiveBorderColor = data.selected
+        ? selectedColor.withOpacity(effectiveBorderOpacity)
+        : unselectedColor.withOpacity(effectiveBorderOpacity);
+    final borderShape = createBorderShape(
       color: style?.borderColor ?? effectiveBorderColor,
-      width: style?.borderWidth ?? (isOutlined ? 1 : 0),
+      width: style?.borderWidth,
       radius: style?.borderRadius,
-      style: isOutlined ? BorderStyle.solid : style?.borderStyle,
+      style: style?.borderStyle,
     );
 
-    return ChipTheme(
-      data: ChipThemeData(
-        brightness: brightness,
-        secondarySelectedColor: selectedColor,
-        secondaryLabelStyle: selectedLabelStyle,
-      ),
-      child: Padding(
-        padding: style?.margin ?? defaultMargin,
-        child: RawChip(
-          padding: style?.padding ?? defaultPadding,
-          shape: style?.borderShape ?? borderShape,
-          clipBehavior: style?.clipBehavior ?? Clip.none,
-          materialTapTargetSize: style?.materialTapTargetSize,
-          label: label ?? Text(data.label),
-          labelStyle: primaryLabelStyle,
-          labelPadding: style?.labelPadding,
-          avatar: avatar,
-          avatarBorder: style?.avatarBorderShape ??
-              createAvatarShape(
-                color: style?.avatarBorderColor,
-                width: style?.avatarBorderWidth,
-                radius: style?.avatarBorderRadius,
-                style: style?.avatarBorderStyle,
-              ),
-          elevation: !isOutlined ? style?.elevation : 0,
-          pressElevation: !isOutlined ? style?.pressElevation : 0,
-          shadowColor: data.style?.color,
-          selectedShadowColor: data.activeStyle?.color,
-          backgroundColor: backgroundColor,
-          selectedColor: selectedColor,
-          disabledColor: disabledColor,
-          deleteIconColor: foregroundColor,
-          checkmarkColor: foregroundColor,
-          showCheckmark: style?.showCheckmark ?? false,
-          isEnabled: data.disabled != true,
-          selected: data.selected,
-          onPressed: () => data.select!(!data.selected),
-        ),
+    return Padding(
+      padding: style?.margin ?? defaultMargin,
+      child: RawChip(
+        padding: style?.padding ?? defaultPadding,
+        shape: style?.borderShape ?? borderShape,
+        clipBehavior: style?.clipBehavior ?? Clip.none,
+        materialTapTargetSize: style?.materialTapTargetSize,
+        label: label ?? Text(data.label),
+        labelStyle: labelStyle,
+        labelPadding: style?.labelPadding,
+        avatar: avatar,
+        avatarBorder: style?.avatarBorderShape ??
+            createAvatarShape(
+              color: style?.avatarBorderColor,
+              width: style?.avatarBorderWidth,
+              radius: style?.avatarBorderRadius,
+              style: style?.avatarBorderStyle,
+            ),
+        elevation: style?.elevation,
+        pressElevation: style?.pressElevation,
+        shadowColor: data.style?.shadowColor,
+        selectedShadowColor: data.activeStyle?.shadowColor,
+        backgroundColor: isFlatten
+            ? backgroundColor.withOpacity(backgroundOpacity)
+            : backgroundColor,
+        selectedColor: isFlatten
+            ? selectedBackgroundColor.withOpacity(backgroundOpacity)
+            : selectedBackgroundColor,
+        disabledColor: disabledColor,
+        deleteIconColor: foregroundColor,
+        checkmarkColor: foregroundColor,
+        showCheckmark: style?.showCheckmark ?? false,
+        isEnabled: data.disabled != true,
+        selected: data.selected,
+        onPressed: () => data.select!(!data.selected),
       ),
     );
   }
