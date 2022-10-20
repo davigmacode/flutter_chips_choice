@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'chip.dart';
 
 /// Choice item
@@ -7,6 +8,16 @@ class C2Choice<T> {
 
   /// Represent as primary text
   final String label;
+
+  /// Typically used as profile image.
+  ///
+  /// If the avatar is to have the user's initials, use [avatarText] instead.
+  final ImageProvider? avatarImage;
+
+  /// The primary content of the chip avatar.
+  ///
+  /// Typically a [Text] widget.
+  final Widget? avatarText;
 
   /// Tooltip string to be used for the body area (where the label and avatar are) of the chip.
   final String? tooltip;
@@ -37,6 +48,8 @@ class C2Choice<T> {
   const C2Choice({
     required this.value,
     required this.label,
+    this.avatarImage,
+    this.avatarText,
     this.tooltip,
     this.meta,
     this.style,
@@ -53,6 +66,8 @@ class C2Choice<T> {
           runtimeType == other.runtimeType &&
           value == other.value &&
           label == other.label &&
+          avatarImage == other.avatarImage &&
+          avatarText == other.avatarText &&
           tooltip == other.tooltip &&
           disabled == other.disabled &&
           hidden == other.hidden &&
@@ -62,6 +77,8 @@ class C2Choice<T> {
   int get hashCode => Object.hash(
         value,
         label,
+        avatarImage,
+        avatarText,
         tooltip,
         disabled,
         hidden,
@@ -73,6 +90,8 @@ class C2Choice<T> {
     required List<E> source,
     required R Function(int index, E item) value,
     required String Function(int index, E item) label,
+    _C2ChoiceProp<E, ImageProvider>? avatarImage,
+    _C2ChoiceProp<E, Widget>? avatarText,
     _C2ChoiceProp<E, String>? tooltip,
     _C2ChoiceProp<E, bool>? disabled,
     _C2ChoiceProp<E, bool>? hidden,
@@ -87,6 +106,8 @@ class C2Choice<T> {
             C2Choice<R>(
               value: value.call(index, item),
               label: label.call(index, item),
+              avatarImage: avatarImage?.call(index, item),
+              avatarText: avatarText?.call(index, item),
               tooltip: tooltip?.call(index, item),
               disabled: disabled?.call(index, item) ?? false,
               hidden: hidden?.call(index, item) ?? false,
@@ -105,6 +126,8 @@ class C2Choice<T> {
   C2Choice<T> copyWith({
     T? value,
     String? label,
+    ImageProvider? avatarImage,
+    Widget? avatarText,
     String? tooltip,
     bool? disabled,
     bool? hidden,
@@ -116,6 +139,8 @@ class C2Choice<T> {
     return C2Choice<T>(
       value: value ?? this.value,
       label: label ?? this.label,
+      avatarImage: avatarImage ?? this.avatarImage,
+      avatarText: avatarText ?? this.avatarText,
       tooltip: tooltip ?? this.tooltip,
       disabled: disabled ?? this.disabled,
       hidden: hidden ?? this.hidden,
@@ -135,6 +160,8 @@ class C2Choice<T> {
     return copyWith(
       value: other.value,
       label: other.label,
+      avatarImage: other.avatarImage,
+      avatarText: other.avatarText,
       tooltip: other.tooltip,
       disabled: other.disabled,
       hidden: other.hidden,

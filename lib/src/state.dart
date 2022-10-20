@@ -283,6 +283,8 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
               return widget.choiceBuilder?.call(item, i) ??
                   C2Chip(
                     label: choiceLabelBuilder.call(item, i),
+                    avatarImage: item.avatarImage,
+                    avatarText: item.avatarText,
                     leading: widget.choiceAvatarBuilder?.call(item, i),
                     checkmark: widget.choiceCheckmark,
                     style: item.style,
