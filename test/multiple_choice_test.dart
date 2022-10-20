@@ -49,7 +49,7 @@ void main() {
       final choiceFinder = find.descendant(
         of: c2Finder,
         matching: find.byWidgetPredicate(
-          (widget) => widget is C2Chip<String> && widget.data.selected == false,
+          (widget) => widget is C2Chip && widget.selected == false,
         ),
       );
       expect(

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'choice_style.dart';
 import 'choice_item.dart';
 import 'types.dart';
 import 'chip.dart';
@@ -19,10 +18,10 @@ class ChipsChoice<T> extends StatefulWidget {
   final C2ChoiceLoader<T>? choiceLoader;
 
   /// Configuration for styling unselected choice widget
-  final C2ChoiceStyle? choiceStyle;
+  final C2ChipStyle? choiceStyle;
 
-  /// Configuration for styling selected choice widget
-  final C2ChoiceStyle? choiceActiveStyle;
+  /// Configuration for styling unselected choice widget
+  final bool choiceCheckmark;
 
   /// Builder for custom label of the choice item
   final C2Builder<T>? choiceLabelBuilder;
@@ -223,7 +222,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceItems = const [],
     this.choiceLoader,
     this.choiceStyle,
-    this.choiceActiveStyle,
+    this.choiceCheckmark = false,
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
     this.choiceBuilder,
@@ -242,9 +241,9 @@ class ChipsChoice<T> extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.alignment = WrapAlignment.start,
     this.runAlignment = WrapAlignment.start,
-    this.wrapCrossAlignment = WrapCrossAlignment.start,
+    this.wrapCrossAlignment = WrapCrossAlignment.center,
     this.spacing = 10,
-    this.runSpacing = 0,
+    this.runSpacing = 10,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
@@ -352,7 +351,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceItems = const [],
     this.choiceLoader,
     this.choiceStyle,
-    this.choiceActiveStyle,
+    this.choiceCheckmark = false,
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
     this.choiceBuilder,
@@ -371,9 +370,9 @@ class ChipsChoice<T> extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.alignment = WrapAlignment.start,
     this.runAlignment = WrapAlignment.start,
-    this.wrapCrossAlignment = WrapCrossAlignment.start,
+    this.wrapCrossAlignment = WrapCrossAlignment.center,
     this.spacing = 10,
-    this.runSpacing = 0,
+    this.runSpacing = 10,
     this.placeholder,
     this.placeholderStyle,
     this.placeholderAlign,
@@ -399,11 +398,11 @@ class ChipsChoice<T> extends StatefulWidget {
 
   /// Default padding for scrollable list
   static final EdgeInsetsGeometry defaultScrollablePadding =
-      const EdgeInsets.symmetric(horizontal: 10);
+      const EdgeInsets.fromLTRB(10, 10, 10, 10);
 
   /// Default padding for wrapped list
   static final EdgeInsetsGeometry defaultWrappedPadding =
-      const EdgeInsets.fromLTRB(15, 10, 15, 10);
+      const EdgeInsets.fromLTRB(15, 15, 15, 15);
 
   /// Default padding for spinner and placeholder
   static final EdgeInsetsGeometry defaultPadding = const EdgeInsets.all(20);

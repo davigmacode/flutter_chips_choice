@@ -46,7 +46,7 @@ void main() {
       final choiceFinder = find.descendant(
         of: c2Finder,
         matching: find.byWidgetPredicate(
-          (widget) => widget is C2Chip<int> && widget.data.selected == false,
+          (widget) => widget is C2Chip && widget.selected == false,
         ),
       );
       expect(
@@ -61,9 +61,9 @@ void main() {
         of: c2Finder,
         matching: find.byWidgetPredicate(
           (widget) =>
-              widget is C2Chip<int> &&
-              widget.data.value == selectionValue &&
-              widget.data.selected == false,
+              widget is C2Chip &&
+              widget.key == ValueKey(selectionValue) &&
+              widget.selected == false,
         ),
       );
       expect(
@@ -82,9 +82,9 @@ void main() {
         of: c2Finder,
         matching: find.byWidgetPredicate(
           (widget) =>
-              widget is C2Chip<int> &&
-              widget.data.value == selectionValue &&
-              widget.data.selected == true,
+              widget is C2Chip &&
+              widget.key == ValueKey(selectionValue) &&
+              widget.selected == true,
         ),
       );
       expect(

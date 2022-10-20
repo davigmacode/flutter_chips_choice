@@ -1,4 +1,4 @@
-import 'choice_style.dart';
+import 'chip.dart';
 
 /// Choice item
 class C2Choice<T> {
@@ -11,20 +11,11 @@ class C2Choice<T> {
   /// Tooltip string to be used for the body area (where the label and avatar are) of the chip.
   final String? tooltip;
 
-  /// Whether the choice is disabled or not
-  final bool? disabled;
-
-  /// Whether the choice is hidden or displayed
-  final bool? hidden;
-
   /// This prop is useful for choice builder
   final dynamic meta;
 
   /// Individual choice unselected item style
-  final C2ChoiceStyle? style;
-
-  /// Individual choice selected item style
-  final C2ChoiceStyle? activeStyle;
+  final C2ChipStyle? style;
 
   /// Callback to select choice
   /// autofill by the system
@@ -36,23 +27,24 @@ class C2Choice<T> {
   /// used in choice builder
   final bool selected;
 
-  /// Return the style based on selected or not
-  C2ChoiceStyle? get effectiveStyle => selected ? activeStyle : style;
+  /// Whether the choice is disabled or not
+  final bool disabled;
+
+  /// Whether the choice is hidden or displayed
+  final bool hidden;
 
   /// Default Constructor
   const C2Choice({
     required this.value,
     required this.label,
     this.tooltip,
-    this.disabled = false,
-    this.hidden = false,
     this.meta,
     this.style,
-    this.activeStyle,
     this.select,
     this.selected = false,
-  })  : assert(disabled != null),
-        assert(hidden != null);
+    this.disabled = false,
+    this.hidden = false,
+  });
 
   @override
   bool operator ==(Object other) =>
@@ -85,8 +77,7 @@ class C2Choice<T> {
     _C2ChoiceProp<E, bool>? disabled,
     _C2ChoiceProp<E, bool>? hidden,
     _C2ChoiceProp<E, dynamic>? meta,
-    _C2ChoiceProp<E, C2ChoiceStyle>? style,
-    _C2ChoiceProp<E, C2ChoiceStyle>? activeStyle,
+    _C2ChoiceProp<E, C2ChipStyle>? style,
   }) {
     return source
         .asMap()
@@ -101,7 +92,6 @@ class C2Choice<T> {
               hidden: hidden?.call(index, item) ?? false,
               meta: meta?.call(index, item),
               style: style?.call(index, item),
-              activeStyle: activeStyle?.call(index, item),
             ),
           );
         })
@@ -119,8 +109,7 @@ class C2Choice<T> {
     bool? disabled,
     bool? hidden,
     dynamic meta,
-    C2ChoiceStyle? style,
-    C2ChoiceStyle? activeStyle,
+    C2ChipStyle? style,
     Function(bool selected)? select,
     bool? selected,
   }) {
@@ -132,7 +121,6 @@ class C2Choice<T> {
       hidden: hidden ?? this.hidden,
       meta: meta ?? this.meta,
       style: style ?? this.style,
-      activeStyle: activeStyle ?? this.activeStyle,
       select: select ?? this.select,
       selected: selected ?? this.selected,
     );
@@ -152,7 +140,6 @@ class C2Choice<T> {
       hidden: other.hidden,
       meta: other.meta,
       style: other.style,
-      activeStyle: other.activeStyle,
       select: other.select,
       selected: other.selected,
     );
