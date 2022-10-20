@@ -57,7 +57,8 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
         : null;
   }
 
-  GlobalKey? selectedKey;
+  @protected
+  BuildContext? selectedContext;
 
   /// Function to select a value
   void select(T val, {bool selected = true});
@@ -72,7 +73,6 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
   @override
   void initState() {
     initScrollController();
-    initSelectedKey();
     loadChoiceItems(ensureSelectedVisibility: true);
     super.initState();
   }
@@ -94,16 +94,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
       loadChoiceItems();
     }
 
-    if (oldWidget.wrapped != widget.wrapped) {
-      initSelectedKey();
-    }
-
     super.didUpdateWidget(oldWidget);
-  }
-
-  @protected
-  void initSelectedKey() {
-    selectedKey = isScrollable ? GlobalKey() : null;
   }
 
   @protected
@@ -125,6 +116,8 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
     _internalScrollController?.dispose();
   }
 
+  @protected
+
   /// load the choice items
   void loadChoiceItems({ensureSelectedVisibility = false}) async {
     try {
@@ -140,6 +133,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
     }
   }
 
+  @protected
   Future<void> loadAsyncChoiceItems() async {
     if (hasChoiceLoaderRun) return;
     try {
@@ -160,11 +154,12 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
 
   /// Scroll to the selected choice item
   void scrollToSelected() {
-    final selectedContext = selectedKey?.currentContext;
-    final renderObject = selectedContext?.findRenderObject();
-    if (isScrollable && renderObject != null) {
-      scrollController?.position.ensureVisible(renderObject);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final renderObject = selectedContext?.findRenderObject();
+      if (isScrollable && renderObject != null) {
+        scrollController?.position.ensureVisible(renderObject);
+      }
+    });
   }
 
   @override
@@ -277,9 +272,11 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
     return item.hidden == true
         ? null
         : Builder(
-            // key: isSelectedTarget ? selectedKey : ValueKey(item.value),
-            key: ValueKey('chip-${item.value}'),
+            key: ValueKey('${item.value}'),
             builder: (context) {
+              if (isSelectedTarget) {
+                selectedContext = context;
+              }
               return widget.choiceBuilder?.call(item, i) ??
                   C2Chip(
                     label: choiceLabelBuilder.call(item, i),
@@ -291,6 +288,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
                     disabled: item.disabled,
                     selected: item.selected,
                     onSelected: item.select,
+                    onDeleted: widget.choiceOnDeleted,
                     tooltip: item.tooltip,
                   );
             },

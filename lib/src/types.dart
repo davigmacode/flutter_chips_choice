@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
-import 'choice_item.dart';
+import 'choice.dart';
 
 /// Callback when the value changed
 typedef C2Changed<T> = void Function(T value);

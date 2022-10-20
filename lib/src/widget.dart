@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'choice_item.dart';
+import 'choice.dart';
 import 'types.dart';
 import 'chip.dart';
 
@@ -31,6 +31,14 @@ class ChipsChoice<T> extends StatefulWidget {
 
   /// Builder for custom choice item widget
   final C2Builder<T>? choiceBuilder;
+
+  /// Called when the user taps the [deleteIcon] to delete the chip.
+  ///
+  /// If null, the delete button will not appear on the chip.
+  ///
+  /// The chip will not automatically remove itself: this just tells the app
+  /// that the user tapped the delete button.
+  final VoidCallback? choiceOnDeleted;
 
   /// Builder for custom spinner widget
   final WidgetBuilder? spinnerBuilder;
@@ -226,6 +234,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
     this.choiceBuilder,
+    this.choiceOnDeleted,
     this.spinnerBuilder,
     this.placeholderBuilder,
     this.errorBuilder,
@@ -355,6 +364,7 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceLabelBuilder,
     this.choiceAvatarBuilder,
     this.choiceBuilder,
+    this.choiceOnDeleted,
     this.spinnerBuilder,
     this.placeholderBuilder,
     this.errorBuilder,
