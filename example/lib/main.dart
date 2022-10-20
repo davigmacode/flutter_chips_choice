@@ -175,6 +175,9 @@ class MyHomePageState extends State<MyHomePage> {
                         value: (i, v) => i,
                         label: (i, v) => v,
                         tooltip: (i, v) => v,
+                        delete: (i, v) => () {
+                          setState(() => options.removeAt(i));
+                        },
                       ),
                       choiceStyle: C2ChipStyle.toned(
                         borderRadius: const BorderRadius.all(
@@ -302,7 +305,6 @@ class MyHomePageState extends State<MyHomePage> {
                               onChanged: (val) => setState(() => user = val),
                               choiceItems: snapshot.data ?? [],
                               choiceStyle: C2ChipStyle.filled(
-                                color: Colors.blueGrey,
                                 selectedStyle: const C2ChipStyle(
                                   backgroundColor: Colors.green,
                                 ),
@@ -328,7 +330,6 @@ class MyHomePageState extends State<MyHomePage> {
                       onChanged: (val) => setState(() => user = val),
                       choiceLoader: getUsers,
                       choiceStyle: C2ChipStyle.filled(
-                        color: Colors.blueGrey,
                         selectedStyle: const C2ChipStyle(
                           backgroundColor: Colors.green,
                         ),
@@ -379,9 +380,9 @@ class MyHomePageState extends State<MyHomePage> {
                                       ),
                                       choiceStyle: C2ChipStyle.outlined(
                                         borderWidth: 2,
-                                        selectedStyle: C2ChipStyle.filled(
-                                          color: Colors.indigo,
-                                          foregroundColor: Colors.white,
+                                        selectedStyle: const C2ChipStyle(
+                                          borderColor: Colors.green,
+                                          foregroundColor: Colors.green,
                                         ),
                                       ),
                                       wrapped: true,
@@ -522,6 +523,7 @@ class CustomChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AnimatedContainer(
       width: width,
       height: height,
@@ -529,10 +531,14 @@ class CustomChip extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: selected ? (color ?? Colors.green) : Colors.transparent,
+        color: selected
+            ? (color ?? Colors.green)
+            : theme.unselectedWidgetColor.withOpacity(.12),
         borderRadius: BorderRadius.all(Radius.circular(selected ? 25 : 10)),
         border: Border.all(
-          color: selected ? (color ?? Colors.green) : Colors.grey,
+          color: selected
+              ? (color ?? Colors.green)
+              : theme.colorScheme.onSurface.withOpacity(.38),
           width: 1,
         ),
       ),
@@ -558,7 +564,7 @@ class CustomChip extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: selected ? Colors.white : Colors.black45,
+                  color: selected ? Colors.white : theme.colorScheme.onSurface,
                 ),
               ),
             ),
