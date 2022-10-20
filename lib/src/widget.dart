@@ -26,8 +26,11 @@ class ChipsChoice<T> extends StatefulWidget {
   /// Builder for custom label of the choice item
   final C2Builder<T>? choiceLabelBuilder;
 
-  /// Builder for custom avatar of the choice item
-  final C2Builder<T>? choiceAvatarBuilder;
+  /// Builder for custom widget to display prior to the chip's [label].
+  final C2Builder<T>? choiceLeadingBuilder;
+
+  /// Builder for custom widget to display next to the chip's [label].
+  final C2Builder<T>? choiceTrailingBuilder;
 
   /// Builder for custom choice item widget
   final C2Builder<T>? choiceBuilder;
@@ -232,7 +235,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceStyle,
     this.choiceCheckmark = false,
     this.choiceLabelBuilder,
-    this.choiceAvatarBuilder,
+    this.choiceLeadingBuilder,
+    this.choiceTrailingBuilder,
     this.choiceBuilder,
     this.choiceOnDeleted,
     this.spinnerBuilder,
@@ -362,7 +366,8 @@ class ChipsChoice<T> extends StatefulWidget {
     this.choiceStyle,
     this.choiceCheckmark = false,
     this.choiceLabelBuilder,
-    this.choiceAvatarBuilder,
+    this.choiceLeadingBuilder,
+    this.choiceTrailingBuilder,
     this.choiceBuilder,
     this.choiceOnDeleted,
     this.spinnerBuilder,

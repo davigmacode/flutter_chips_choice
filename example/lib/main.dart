@@ -333,7 +333,7 @@ class MyHomePageState extends State<MyHomePage> {
                           backgroundColor: Colors.green,
                         ),
                       ),
-                      choiceAvatarBuilder: (data, i) {
+                      choiceLeadingBuilder: (data, i) {
                         if (data.meta == null) return null;
                         return CircleAvatar(
                           maxRadius: 12,
