@@ -32,6 +32,7 @@ dependencies:
   chips_choice:
     path: ../
   theme_patrol: ^2.1.0
+  animated_checkmark: ^1.0.1
   dio: ^4.0.0
 
 
