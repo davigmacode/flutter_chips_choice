@@ -4,20 +4,22 @@
 
 Lite version of [smart_select](https://pub.dev/packages/smart_select) package, zero dependencies, an easy way to provide a single or multiple choice chips.
 
-## What's New in Version 2.1.x
+## What's New in Version 3.x.x
 
-* Improve performance
-* Support sound null safety
-* Improve async choices loader with asyncMemoizer
-* Provide `C2ChoiceMemoizer<T>` which is an alias to `AsyncMemoizer<List<C2Choice<T>>>`
-* The chip widget respective to app theme
-* Introduce chip appearance (elevated, outlined, flatten)
-* Value of multiple choice cannot be null
-* Fixed issue #37
-* Fixed issue #34
-* Fixed wrapped chips run spacing on web
-* Fixed chip run spacing
-* Fixed tooltip error
+* Changed default chip to [flexi_chip](https://pub.dev/packages/flexi_chip)
+* C2Chip is alias to `FlexiChip` now
+* C2ChoiceStyle changed to C2ChipStyle and alias to `FlexiChipStyle`
+* Removed `ChipsChoice.choiceActiveStyle` and `C2Choice.activeStyle` since the C2ChipStyle can be an event driven properties
+* Removed `C2ChoiceStyle.useCheckmark`, changed to `ChipsChoice.choiceCheckmark`
+* Removed `ChipsChoice.choiceAvatarBuilder`
+* Added `ChipsChoice.choiceLeadingBuilder`
+* Added `ChipsChoice.choiceTrailingBuilder`
+* Added `C2Choice.delete`
+* Added `C2Choice.avatarImage`
+* Added `C2Choice.avatarText`
+* Fixed issue #26, add leading and trailing widget
+* Improved performance
+* More flexibility on styling
 
 ## Demo
 
@@ -139,6 +141,9 @@ Widget build(BuildContext context) {
 ```
 
 ### Style Configuration
+
+See the [API References](https://pub.dev/documentation/flexi_chip/latest/flexi_chip/FlexiChipStyle-class.html), to find out all  of the parameters.
+
 ```dart
 // available configuration for single and multiple choice
 ChipsChoice<T>.[single|multiple]({
@@ -148,103 +153,13 @@ ChipsChoice<T>.[single|multiple]({
   ...,
   ...,
 
-  // Choice unselected item style
-  C2ChoiceStyle choiceStyle,
-
-  // Choice selected item style
-  C2ChoiceStyle choiceActiveStyle,
+  // Choice item style
+  C2ChipStyle choiceStyle,
 
   // other available configuration
   // explained below
   ...,
   ...,
-
-})
-```
-
-```dart
-// Choice item style configuration
-C2ChoiceStyle( {
-
-  // Item color
-  Color color,
-
-  // choice item margin
-  EdgeInsetsGeometry margin,
-
-  // The padding between the contents of the chip and the outside [shape].
-  //
-  // Defaults to 4 logical pixels on all sides.
-  EdgeInsetsGeometry padding,
-
-  // Chips elevation
-  double elevation,
-
-  // Longpress chips elevation
-  double pressElevation,
-
-  // whether the chips use checkmark or not
-  bool showCheckmark,
-
-  // Chip label style
-  TextStyle labelStyle,
-
-  // Chip label padding
-  EdgeInsetsGeometry labelPadding,
-
-  // Chip brightness
-  Brightness brightness,
-
-  // Chip border color
-  Color borderColor,
-
-  // Chip border opacity,
-  // only effect when [brightness] is [Brightness.light]
-  double borderOpacity,
-
-  // The width of this side of the border, in logical pixels.
-  double borderWidth,
-
-  // The radii for each corner.
-  BorderRadiusGeometry borderRadius,
-
-  // The style of this side of the border.
-  //
-  // To omit a side, set [style] to [BorderStyle.none].
-  // This skips painting the border, but the border still has a [width].
-  BorderStyle borderStyle,
-
-  // Chips shape border
-  ShapeBorder borderShape;
-
-  // Chip border color
-  Color avatarBorderColor,
-
-  // The width of this side of the border, in logical pixels.
-  double avatarBorderWidth,
-
-  // The radii for each corner.
-  BorderRadiusGeometry avatarBorderRadius,
-
-  // The style of this side of the border.
-  //
-  // To omit a side, set [style] to [BorderStyle.none].
-  // This skips painting the border, but the border still has a [width].
-  BorderStyle avatarBorderStyle,
-
-  // Chips shape border
-  ShapeBorder avatarBorderShape,
-
-  // Chips clip behavior
-  Clip clipBehavior,
-
-  // Configures the minimum size of the tap target.
-  MaterialTapTargetSize materialTapTargetSize,
-
-  // Color to be used for the chip's background indicating that it is disabled.
-  //
-  // It defaults to [Colors.black38].
-  Color disabledColor,
 
 })
 ```
@@ -263,8 +178,11 @@ ChipsChoice<T>.[single|multiple]({
   // Builder for custom choice item label
   C2Builder<T> choiceLabelBuilder,
 
-  /// Builder for custom choice item label
-  C2Builder<T> choiceAvatarBuilder,
+  // Builder for custom widget to display prior to the chip's [label].
+  C2Builder<T>? choiceLeadingBuilder;
+
+  // Builder for custom widget to display next to the chip's [label].
+  C2Builder<T>? choiceTrailingBuilder;
 
   // Builder for custom choice item
   C2Builder<T> choiceBuilder,
@@ -272,7 +190,7 @@ ChipsChoice<T>.[single|multiple]({
   // Builder for spinner widget
   WidgetBuilder spinnerBuilder,
 
-  /// Builder for placeholder widget
+  // Builder for placeholder widget
   WidgetBuilder placeholderBuilder,
 
   // Builder for error widget
@@ -441,26 +359,3 @@ Widget build(BuildContext context) {
 }
 ```
 
-## License
-
-```
-Copyright (c) 2020 Irfan Vigma Taufik
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```

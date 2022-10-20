@@ -1,3 +1,20 @@
+## 3.0.0
+
+* Changed default chip to `flexi_chip`
+* C2Chip is alias to `FlexiChip` now
+* C2ChoiceStyle changed to C2ChipStyle and alias to `FlexiChipStyle`
+* Removed `ChipsChoice.choiceActiveStyle` and `C2Choice.activeStyle` since the C2ChipStyle can be an event driven properties
+* Removed `C2ChoiceStyle.useCheckmark`, changed to `ChipsChoice.choiceCheckmark`
+* Removed `ChipsChoice.choiceAvatarBuilder`
+* Added `ChipsChoice.choiceLeadingBuilder`
+* Added `ChipsChoice.choiceTrailingBuilder`
+* Added `ChipsChoice.choiceOnDelete`
+* Added `C2Choice.avatarImage`
+* Added `C2Choice.avatarText`
+* Fixed issue #26, add leading and trailing widget
+* Improved performance
+* More flexibility on styling
+
 ## 2.1.1
 
 * Hotfix static analysis error
