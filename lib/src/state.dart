@@ -289,7 +289,7 @@ abstract class C2State<T> extends State<ChipsChoice<T>> {
                     disabled: item.disabled,
                     selected: item.selected,
                     onSelected: item.select,
-                    onDeleted: widget.choiceOnDeleted,
+                    onDeleted: item.delete,
                     tooltip: item.tooltip,
                   );
             },

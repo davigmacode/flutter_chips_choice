@@ -28,6 +28,14 @@ class C2Choice<T> {
   /// Individual choice unselected item style
   final C2ChipStyle? style;
 
+  /// Called when the user taps the [deleteIcon] to delete the chip.
+  ///
+  /// If null, the delete button will not appear on the chip.
+  ///
+  /// The chip will not automatically remove itself: this just tells the app
+  /// that the user tapped the delete button.
+  final VoidCallback? delete;
+
   /// Callback to select choice
   /// autofill by the system
   /// used in choice builder
@@ -53,6 +61,7 @@ class C2Choice<T> {
     this.tooltip,
     this.meta,
     this.style,
+    this.delete,
     this.select,
     this.selected = false,
     this.disabled = false,
@@ -69,6 +78,7 @@ class C2Choice<T> {
           avatarImage == other.avatarImage &&
           avatarText == other.avatarText &&
           tooltip == other.tooltip &&
+          delete == other.delete &&
           disabled == other.disabled &&
           hidden == other.hidden &&
           selected == other.selected;
@@ -80,6 +90,7 @@ class C2Choice<T> {
         avatarImage,
         avatarText,
         tooltip,
+        delete,
         disabled,
         hidden,
         selected,
@@ -97,6 +108,7 @@ class C2Choice<T> {
     _C2ChoiceProp<E, bool>? hidden,
     _C2ChoiceProp<E, dynamic>? meta,
     _C2ChoiceProp<E, C2ChipStyle>? style,
+    _C2ChoiceProp<E, VoidCallback>? delete,
   }) {
     return source
         .asMap()
@@ -113,6 +125,7 @@ class C2Choice<T> {
               hidden: hidden?.call(index, item) ?? false,
               meta: meta?.call(index, item),
               style: style?.call(index, item),
+              delete: delete?.call(index, item),
             ),
           );
         })
@@ -133,6 +146,7 @@ class C2Choice<T> {
     bool? hidden,
     dynamic meta,
     C2ChipStyle? style,
+    VoidCallback? delete,
     Function(bool selected)? select,
     bool? selected,
   }) {
@@ -146,6 +160,7 @@ class C2Choice<T> {
       hidden: hidden ?? this.hidden,
       meta: meta ?? this.meta,
       style: style ?? this.style,
+      delete: delete ?? this.delete,
       select: select ?? this.select,
       selected: selected ?? this.selected,
     );
@@ -167,6 +182,7 @@ class C2Choice<T> {
       hidden: other.hidden,
       meta: other.meta,
       style: other.style,
+      delete: other.delete,
       select: other.select,
       selected: other.selected,
     );
