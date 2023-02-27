@@ -1,0 +1,15 @@
+build/** linguist-vendored
+android/** linguist-vendored
+ios/** linguist-vendored
+web/** linguist-vendored
+linux/** linguist-vendored
+macos/** linguist-vendored
+windows/** linguist-vendored
+docs/** linguist-vendored
+example/build/** linguist-vendored
+example/android/** linguist-vendored
+example/ios/** linguist-vendored
+example/linux/** linguist-vendored
+example/macos/** linguist-vendored
+example/windows/** linguist-vendored
+example/docs/** linguist-vendored
