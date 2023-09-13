@@ -1,3 +1,7 @@
+## 3.0.1
+
+* Changed sdk constrains
+
 ## 3.0.0
 
 * Changed default chip to `flexi_chip`

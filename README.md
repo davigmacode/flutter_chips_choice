@@ -2,6 +2,18 @@
 
 <a href="https://www.buymeacoffee.com/davigmacode" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="195" height="55"></a>
 
+> [!IMPORTANT]
+>
+> Hi everyone,
+>
+> I'm sorry to announce that I'm no longer maintaining the [chips_choice](https://pub.dev/packages/chips_choice) package. It's been a great project, but it's become too difficult to maintain.
+>
+> In its place, I've released a new package called [choice](https://pub.dev/packages/choice). The combination to [smart_select](https://pub.dev/packages/smart_select) and [chips_choice](https://pub.dev/packages/chips_choice) with cleaner, more flexible, and composable API for creating inline or prompted choice widgets with single or multiple selection.
+>
+> I hope you'll check out [choice](https://pub.dev/packages/choice). I think you'll find it to be a great replacement for [chips_choice](https://pub.dev/packages/chips_choice).
+>
+> Thanks for your understanding.
+
 Lite version of [smart_select](https://pub.dev/packages/smart_select) package, zero dependencies, an easy way to provide a single or multiple choice chips.
 
 ## What's New in Version 3.x.x

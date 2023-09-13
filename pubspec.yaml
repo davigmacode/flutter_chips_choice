@@ -1,10 +1,10 @@
 name: chips_choice
 description: Lite version of smart_select package, zero dependencies, an easy way to provide a single or multiple choice chips.
-version: 3.0.0
+version: 3.0.1
 homepage: https://github.com/davigmacode/flutter_chips_choice
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
   flutter: '>=2.0.0'
 
 dependencies:

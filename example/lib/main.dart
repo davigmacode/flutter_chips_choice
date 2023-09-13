@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           seedColor: Colors.red,
         ),
-        toggleableActiveColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         // materialTapTargetSize: MaterialTapTargetSize.padded,
       ),
@@ -631,7 +630,7 @@ void _about(BuildContext context) {
               'chips_choice',
               style: Theme.of(context)
                   .textTheme
-                  .headline5!
+                  .headlineSmall!
                   .copyWith(color: Colors.black87),
             ),
             subtitle: const Text('by davigmacode'),
@@ -651,7 +650,7 @@ void _about(BuildContext context) {
                     'Easy way to provide a single or multiple choice chips.',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2!
+                        .bodyMedium!
                         .copyWith(color: Colors.black54),
                   ),
                   Container(height: 15),
